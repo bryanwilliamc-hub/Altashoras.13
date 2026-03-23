@@ -1,0 +1,2993 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adega e Tabacaria Altas Horas - Pedidos Online</title>
+  <meta name="description" content="Adega e Tabacaria Altas Horas - Vinhos, Espumantes, Destilados, Cervejas Especiais e Tabacaria em Registro/SP. Faça seu pedido online!">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* ============================================
+       VARIÁVEIS E RESET
+       ============================================ */
+    :root {
+      --cor-primaria: #8B0000;
+      --cor-primaria-escura: #6B0000;
+      --cor-secundaria: #D4AF37;
+      --cor-fundo: #F5F5F5;
+      --cor-texto: #2C2C2C;
+      --cor-destaque: #B8860B;
+      --cor-branco: #FFFFFF;
+      --cor-preto: #1A1A1A;
+      --cor-cinza: #777777;
+      --cor-cinza-claro: #E8E8E8;
+      --cor-sucesso: #28a745;
+      --cor-whatsapp: #25D366;
+      --sombra: 0 4px 15px rgba(0,0,0,0.1);
+      --sombra-hover: 0 8px 25px rgba(0,0,0,0.15);
+      --transicao: all 0.3s ease;
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      border: none;
+      outline: none;
+    }
+
+    input, textarea, select {
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+    }
+
+    /* ============================================
+       HEADER / NAVEGAÇÃO
+       ============================================ */
+    .header {
+      background: linear-gradient(135deg, var(--cor-preto) 0%, var(--cor-primaria-escura) 100%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo i {
+      font-size: 28px;
+      color: var(--cor-secundaria);
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--cor-branco);
+      line-height: 1.2;
+    }
+
+    .logo-text span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--cor-secundaria);
+      letter-spacing: 1px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      color: var(--cor-branco);
+      font-weight: 500;
+      font-size: 15px;
+      transition: var(--transicao);
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cor-secundaria);
+      transition: var(--transicao);
+    }
+
+    .nav-menu a:hover::after,
+    .nav-menu a.active::after {
+      width: 100%;
+    }
+
+    .nav-menu a:hover {
+      color: var(--cor-secundaria);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .cart-btn {
+      position: relative;
+      background: none;
+      color: var(--cor-branco);
+      font-size: 22px;
+      padding: 8px;
+      transition: var(--transicao);
+    }
+
+    .cart-btn:hover {
+      color: var(--cor-secundaria);
+      transform: scale(1.1);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--cor-secundaria);
+      color: var(--cor-preto);
+      font-size: 11px;
+      font-weight: 700;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--cor-branco);
+      border-radius: 3px;
+      transition: var(--transicao);
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* ============================================
+       HERO / BANNER
+       ============================================ */
+    .hero {
+      background: linear-gradient(135deg, rgba(26,26,26,0.92) 0%, rgba(139,0,0,0.88) 100%),
+                  url('https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?w=1920') center/cover no-repeat;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 20px 60px;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--cor-secundaria);
+      color: var(--cor-secundaria);
+      padding: 8px 24px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--cor-branco);
+      margin-bottom: 10px;
+      line-height: 1.1;
+    }
+
+    .hero h1 span {
+      color: var(--cor-secundaria);
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 15px;
+      font-weight: 300;
+    }
+
+    .hero-address {
+      font-size: 15px;
+      color: var(--cor-secundaria);
+      margin-bottom: 35px;
+    }
+
+    .hero-address i {
+      margin-right: 6px;
+    }
+
+    .hero-address a {
+      color: var(--cor-secundaria);
+      text-decoration: underline;
+      transition: var(--transicao);
+    }
+
+    .hero-address a:hover {
+      color: var(--cor-branco);
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: var(--transicao);
+    }
+
+    .btn-primary {
+      background: var(--cor-secundaria);
+      color: var(--cor-preto);
+    }
+
+    .btn-primary:hover {
+      background: #e6c142;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cor-branco);
+      border: 2px solid var(--cor-branco);
+    }
+
+    .btn-outline:hover {
+      background: var(--cor-branco);
+      color: var(--cor-preto);
+      transform: translateY(-2px);
+    }
+
+    /* ============================================
+       SEÇÕES GERAIS
+       ============================================ */
+    .section {
+      padding: 80px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--cor-primaria);
+      margin-bottom: 10px;
+    }
+
+    .section-header p {
+      font-size: 16px;
+      color: var(--cor-cinza);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-header .divider {
+      width: 60px;
+      height: 3px;
+      background: var(--cor-secundaria);
+      margin: 15px auto 0;
+      border-radius: 3px;
+    }
+
+    /* ============================================
+       CATEGORIAS
+       ============================================ */
+    .categorias {
+      background: var(--cor-branco);
+    }
+
+    .categorias-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+    }
+
+    .categoria-card {
+      text-align: center;
+      padding: 30px 15px;
+      border-radius: var(--radius);
+      background: var(--cor-fundo);
+      cursor: pointer;
+      transition: var(--transicao);
+      border: 2px solid transparent;
+    }
+
+    .categoria-card:hover,
+    .categoria-card.active {
+      border-color: var(--cor-primaria);
+      transform: translateY(-5px);
+      box-shadow: var(--sombra);
+    }
+
+    .categoria-card i {
+      font-size: 36px;
+      color: var(--cor-primaria);
+      margin-bottom: 12px;
+    }
+
+    .categoria-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cor-texto);
+    }
+
+    /* ============================================
+       PROMOÇÕES
+       ============================================ */
+    .promocoes {
+      background: linear-gradient(135deg, var(--cor-preto) 0%, var(--cor-primaria-escura) 100%);
+    }
+
+    .promocoes .section-header h2 {
+      color: var(--cor-branco);
+    }
+
+    .promocoes .section-header p {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    /* ============================================
+       PRODUTOS
+       ============================================ */
+    .produtos-controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border: 2px solid var(--cor-cinza-claro);
+      border-radius: 50px;
+      font-size: 14px;
+      transition: var(--transicao);
+      background: var(--cor-branco);
+    }
+
+    .search-box input:focus {
+      border-color: var(--cor-primaria);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cor-cinza);
+    }
+
+    .filtro-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filtro-btn {
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--cor-branco);
+      color: var(--cor-texto);
+      border: 2px solid var(--cor-cinza-claro);
+      transition: var(--transicao);
+    }
+
+    .filtro-btn:hover,
+    .filtro-btn.active {
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+      border-color: var(--cor-primaria);
+    }
+
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .produto-card {
+      background: var(--cor-branco);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      transition: var(--transicao);
+      position: relative;
+    }
+
+    .produto-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--sombra-hover);
+    }
+
+    .produto-img {
+      position: relative;
+      height: 220px;
+      background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 15px;
+    }
+
+    .produto-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: var(--transicao);
+    }
+
+    .produto-card:hover .produto-img img {
+      transform: scale(1.05);
+    }
+
+    .badge-promo {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--cor-secundaria);
+      color: var(--cor-preto);
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 2;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .badge-categoria {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.6);
+      color: var(--cor-branco);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 500;
+      z-index: 2;
+    }
+
+    .produto-info {
+      padding: 20px;
+    }
+
+    .produto-info h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--cor-texto);
+    }
+
+    .produto-info .descricao {
+      font-size: 13px;
+      color: var(--cor-cinza);
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .produto-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preco {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--cor-primaria);
+    }
+
+    .preco small {
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .btn-add {
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transicao);
+    }
+
+    .btn-add:hover {
+      background: var(--cor-primaria-escura);
+      transform: scale(1.05);
+    }
+
+    .btn-add.added {
+      background: var(--cor-sucesso);
+    }
+
+    .sem-resultados {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--cor-cinza);
+      grid-column: 1 / -1;
+    }
+
+    .sem-resultados i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: var(--cor-cinza-claro);
+    }
+
+    /* ============================================
+       SOBRE
+       ============================================ */
+    .sobre {
+      background: var(--cor-branco);
+    }
+
+    .sobre-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .sobre-img {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      height: 400px;
+      background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-preto) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sobre-img i {
+      font-size: 120px;
+      color: var(--cor-secundaria);
+      opacity: 0.3;
+    }
+
+    .sobre-text h3 {
+      font-size: 28px;
+      color: var(--cor-primaria);
+      margin-bottom: 15px;
+    }
+
+    .sobre-text p {
+      font-size: 15px;
+      color: var(--cor-cinza);
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+
+    .valores-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .valor-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .valor-item i {
+      color: var(--cor-secundaria);
+      font-size: 20px;
+      margin-top: 3px;
+    }
+
+    .valor-item h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .valor-item p {
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
+    /* ============================================
+       CONTATO
+       ============================================ */
+    .contato-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .contato-info-card {
+      background: var(--cor-branco);
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--sombra);
+    }
+
+    .contato-info-card h3 {
+      font-size: 22px;
+      color: var(--cor-primaria);
+      margin-bottom: 25px;
+    }
+
+    .contato-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .contato-item-icon {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cor-branco);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .contato-item h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .contato-item p {
+      font-size: 13px;
+      color: var(--cor-cinza);
+    }
+
+    .contato-item a {
+      color: var(--cor-primaria);
+      text-decoration: underline;
+    }
+
+    .mapa-container {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+      height: 100%;
+      min-height: 350px;
+    }
+
+    .mapa-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .footer {
+      background: linear-gradient(135deg, var(--cor-preto) 0%, #2a0a0a 100%);
+      color: var(--cor-branco);
+      padding: 60px 20px 20px;
+    }
+
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--cor-secundaria);
+    }
+
+    .footer-col p,
+    .footer-col li {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.8;
+    }
+
+    .footer-col li a {
+      transition: var(--transicao);
+    }
+
+    .footer-col li a:hover {
+      color: var(--cor-secundaria);
+      padding-left: 5px;
+    }
+
+    .footer-col .social-links {
+      display: flex;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .footer-col .social-links a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cor-branco);
+      font-size: 16px;
+      transition: var(--transicao);
+    }
+
+    .footer-col .social-links a:hover {
+      background: var(--cor-secundaria);
+      color: var(--cor-preto);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-bottom p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ============================================
+       CARRINHO DRAWER
+       ============================================ */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transicao);
+    }
+
+    .cart-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 90vw;
+      height: 100%;
+      background: var(--cor-branco);
+      z-index: 2001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+    }
+
+    .cart-drawer.open {
+      right: 0;
+    }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 25px;
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+    }
+
+    .cart-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-close {
+      background: none;
+      color: var(--cor-branco);
+      font-size: 22px;
+      padding: 5px;
+      transition: var(--transicao);
+    }
+
+    .cart-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--cor-cinza);
+    }
+
+    .cart-empty i {
+      font-size: 60px;
+      color: var(--cor-cinza-claro);
+      margin-bottom: 15px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      padding: 15px;
+      border-bottom: 1px solid var(--cor-cinza-claro);
+      align-items: center;
+    }
+
+    .cart-item-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #f0e6e6;
+    }
+
+    .cart-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-details {
+      flex: 1;
+    }
+
+    .cart-item-details h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-details .item-price {
+      font-size: 14px;
+      color: var(--cor-primaria);
+      font-weight: 600;
+    }
+
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .qty-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transicao);
+      border: 1px solid var(--cor-cinza-claro);
+    }
+
+    .qty-btn:hover {
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+      border-color: var(--cor-primaria);
+    }
+
+    .cart-item-qty span {
+      font-weight: 600;
+      font-size: 14px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .cart-item-remove {
+      background: none;
+      color: #dc3545;
+      font-size: 16px;
+      padding: 5px;
+      transition: var(--transicao);
+    }
+
+    .cart-item-remove:hover {
+      transform: scale(1.2);
+    }
+
+    .cart-footer {
+      padding: 20px 25px;
+      border-top: 2px solid var(--cor-cinza-claro);
+      background: var(--cor-fundo);
+    }
+
+    .cart-frete {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .cart-frete input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 2px solid var(--cor-cinza-claro);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .cart-frete input:focus {
+      border-color: var(--cor-primaria);
+    }
+
+    .cart-frete button {
+      padding: 10px 18px;
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: var(--transicao);
+    }
+
+    .cart-frete button:hover {
+      background: var(--cor-primaria-escura);
+    }
+
+    .frete-result {
+      font-size: 12px;
+      color: var(--cor-sucesso);
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--cor-texto);
+    }
+
+    .cart-total .total-value {
+      color: var(--cor-primaria);
+      font-size: 22px;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 15px;
+      background: var(--cor-sucesso);
+      color: var(--cor-branco);
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: var(--transicao);
+    }
+
+    .btn-checkout:hover {
+      background: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-checkout:disabled {
+      background: var(--cor-cinza);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ============================================
+       MODAL DE CHECKOUT
+       ============================================ */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--cor-branco);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 550px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 25px;
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      color: var(--cor-branco);
+      font-size: 22px;
+      padding: 5px;
+      transition: var(--transicao);
+    }
+
+    .modal-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      padding: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--cor-texto);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--cor-cinza-claro);
+      border-radius: 8px;
+      font-size: 14px;
+      transition: var(--transicao);
+      background: var(--cor-branco);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--cor-primaria);
+    }
+
+    .form-group textarea {
+      height: 80px;
+      resize: vertical;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--cor-primaria);
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .modal-footer {
+      padding: 0 25px 25px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 12px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      border: 2px solid var(--cor-cinza-claro);
+      transition: var(--transicao);
+    }
+
+    .btn-cancel:hover {
+      background: var(--cor-cinza-claro);
+    }
+
+    .btn-confirm {
+      flex: 2;
+      padding: 12px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--cor-whatsapp);
+      color: var(--cor-branco);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transicao);
+    }
+
+    .btn-confirm:hover {
+      background: #1fb855;
+      transform: translateY(-2px);
+    }
+
+    /* ============================================
+       MODAL DE CONFIRMAÇÃO
+       ============================================ */
+    .resumo-pedido {
+      background: var(--cor-fundo);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .resumo-pedido h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--cor-primaria);
+    }
+
+    .resumo-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--cor-cinza-claro);
+    }
+
+    .resumo-item:last-child {
+      border-bottom: none;
+    }
+
+    .resumo-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 700;
+      padding-top: 10px;
+      margin-top: 10px;
+      border-top: 2px solid var(--cor-primaria);
+      color: var(--cor-primaria);
+    }
+
+    .resumo-dados {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--cor-cinza);
+    }
+
+    .resumo-dados strong {
+      color: var(--cor-texto);
+    }
+
+    /* ============================================
+       WHATSAPP FLUTUANTE
+       ============================================ */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 999;
+    }
+
+    .whatsapp-float a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: var(--cor-whatsapp);
+      border-radius: 50%;
+      color: var(--cor-branco);
+      font-size: 30px;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+      transition: var(--transicao);
+      animation: whatsappPulse 2s infinite;
+    }
+
+    @keyframes whatsappPulse {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+
+    .whatsapp-float a:hover {
+      transform: scale(1.1);
+    }
+
+    .whatsapp-tooltip {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--cor-branco);
+      color: var(--cor-texto);
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      box-shadow: var(--sombra);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transicao);
+    }
+
+    .whatsapp-float:hover .whatsapp-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ============================================
+       TOAST NOTIFICATION
+       ============================================ */
+    .toast-container {
+      position: fixed;
+      top: 85px;
+      right: 20px;
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--cor-sucesso);
+      color: var(--cor-branco);
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      animation: toastIn 0.4s ease forwards;
+      min-width: 280px;
+    }
+
+    .toast.toast-out {
+      animation: toastOut 0.4s ease forwards;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(100px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(100px); }
+    }
+
+    /* ============================================
+       SCROLL TO TOP
+       ============================================ */
+    .scroll-top {
+      position: fixed;
+      bottom: 95px;
+      right: 30px;
+      width: 45px;
+      height: 45px;
+      background: var(--cor-primaria);
+      color: var(--cor-branco);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transicao);
+      box-shadow: var(--sombra);
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      background: var(--cor-primaria-escura);
+      transform: translateY(-3px);
+    }
+
+    /* ============================================
+       OCULTAR SEÇÕES (NAVEGAÇÃO SPA)
+       ============================================ */
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active-page {
+      display: block;
+    }
+
+    /* ============================================
+       RESPONSIVIDADE
+       ============================================ */
+    @media (max-width: 1024px) {
+      .sobre-content {
+        grid-template-columns: 1fr;
+      }
+
+      .sobre-img {
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: var(--cor-preto);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 40px;
+        gap: 0;
+        transition: left 0.4s ease;
+      }
+
+      .nav-menu.open {
+        left: 0;
+      }
+
+      .nav-menu a {
+        font-size: 18px;
+        padding: 15px 0;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero-subtitle {
+        font-size: 15px;
+      }
+
+      .section-header h2 {
+        font-size: 28px;
+      }
+
+      .contato-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .valores-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .produtos-controls {
+        flex-direction: column;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .filtro-btns {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+      }
+
+      .filtro-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal {
+        max-width: 100%;
+        margin: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 26px;
+      }
+
+      .hero-btns {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .produtos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .promo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .categorias-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .logo-text {
+        font-size: 14px;
+      }
+
+      .logo-text span {
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       HEADER
+       ============================================ -->
+  <header class="header">
+    <div class="header-container">
+      <a href="#" class="logo" onclick="navigateTo('inicio'); return false;">
+        <i class="fas fa-wine-bottle"></i>
+        <div class="logo-text">
+          Altas Horas
+          <span>Adega &amp; Tabacaria</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <a href="#" class="active" data-page="inicio" onclick="navigateTo('inicio'); return false;">Início</a>
+        <a href="#" data-page="produtos" onclick="navigateTo('produtos'); return false;">Produtos</a>
+        <a href="#" data-page="sobre" onclick="navigateTo('sobre'); return false;">Sobre</a>
+        <a href="#" data-page="contato" onclick="navigateTo('contato'); return false;">Contato</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="cart-btn" onclick="toggleCart()" aria-label="Abrir carrinho">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       PÁGINA INÍCIO
+       ============================================ -->
+  <div id="page-inicio" class="page-section active-page">
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-star"></i> Desde sempre ao seu lado</div>
+        <h1>Adega e Tabacaria<br><span>Altas Horas</span></h1>
+        <p class="hero-subtitle">Os melhores vinhos, espumantes, destilados, cervejas especiais e produtos de tabacaria com entrega ou retirada na loja.</p>
+        <p class="hero-address">
+          <i class="fas fa-map-marker-alt"></i>
+          <a href="https://www.google.com/maps/search/?api=1&query=Rua+Joaquim+Marques+Alves+90+Centro+Registro+SP" target="_blank" rel="noopener noreferrer">
+            Rua Joaquim Marques Alves 90, Centro - Registro/SP
+          </a>
+        </p>
+        <div class="hero-btns">
+          <a href="#" class="btn btn-primary" onclick="navigateTo('produtos'); return false;">
+            <i class="fas fa-shopping-bag"></i> Ver Produtos
+          </a>
+          <a href="#" class="btn btn-outline" onclick="navigateTo('contato'); return false;">
+            <i class="fas fa-phone-alt"></i> Fale Conosco
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIAS -->
+    <section class="section categorias">
+      <div class="container">
+        <div class="section-header">
+          <h2>Nossas Categorias</h2>
+          <p>Explore nossa seleção exclusiva de bebidas e produtos de tabacaria</p>
+          <div class="divider"></div>
+        </div>
+        <div class="categorias-grid">
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Todos');">
+            <i class="fas fa-th-large"></i>
+            <h3>Todos</h3>
+          </div>
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Destilados');">
+            <i class="fas fa-glass-whiskey"></i>
+            <h3>Destilados</h3>
+          </div>
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Cervejas');">
+            <i class="fas fa-beer-mug-empty"></i>
+            <h3>Cervejas</h3>
+          </div>
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Ice');">
+            <i class="fas fa-cocktail"></i>
+            <h3>Ice/Drinks</h3>
+          </div>
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Refrigerantes');">
+            <i class="fas fa-bottle-water"></i>
+            <h3>Refrigerantes</h3>
+          </div>
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Salgadinhos');">
+            <i class="fas fa-cookie-bite"></i>
+            <h3>Salgadinhos</h3>
+          </div>
+          <div class="categoria-card" onclick="navigateTo('produtos'); filterByCategory('Tabacaria');">
+            <i class="fas fa-smoking"></i>
+            <h3>Tabacaria</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMOÇÕES -->
+    <section class="section promocoes">
+      <div class="container">
+        <div class="section-header">
+          <h2><i class="fas fa-tags"></i> Promoções da Semana</h2>
+          <p>Aproveite nossas ofertas especiais por tempo limitado!</p>
+          <div class="divider"></div>
+        </div>
+        <div class="promo-grid" id="promoGrid">
+          <!-- Preenchido via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============================================
+       PÁGINA PRODUTOS
+       ============================================ -->
+  <div id="page-produtos" class="page-section">
+    <section class="section" style="padding-top: 100px;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Nosso Catálogo</h2>
+          <p>Confira todos os nossos produtos e faça seu pedido</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="produtos-controls">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Buscar produto pelo nome..." oninput="filterProducts()">
+          </div>
+          <div class="filtro-btns" id="filtroBtns">
+            <button class="filtro-btn active" onclick="setFilter('Todos')">Todos</button>
+            <button class="filtro-btn" onclick="setFilter('Destilados')">Destilados</button>
+            <button class="filtro-btn" onclick="setFilter('Cervejas')">Cervejas</button>
+            <button class="filtro-btn" onclick="setFilter('Ice')">Ice/Drinks</button>
+            <button class="filtro-btn" onclick="setFilter('Refrigerantes')">Refrigerantes</button>
+            <button class="filtro-btn" onclick="setFilter('Salgadinhos')">Salgadinhos</button>
+            <button class="filtro-btn" onclick="setFilter('Tabacaria')">Tabacaria</button>
+          </div>
+        </div>
+
+        <div class="produtos-grid" id="produtosGrid">
+          <!-- Preenchido via JavaScript -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================
+       PÁGINA SOBRE
+       ============================================ -->
+  <div id="page-sobre" class="page-section">
+    <section class="section sobre" style="padding-top: 100px;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Sobre Nós</h2>
+          <p>Conheça a história da Adega e Tabacaria Altas Horas</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="sobre-content">
+          <div class="sobre-img">
+            <i class="fas fa-wine-bottle"></i>
+          </div>
+          <div class="sobre-text">
+            <h3>Nossa História</h3>
+            <p>
+              A <strong>Adega e Tabacaria Altas Horas</strong> nasceu da paixão por oferecer produtos de qualidade
+              e uma experiência única para nossos clientes em Registro/SP. Localizada no coração do centro,
+              somos referência em vinhos, espumantes, destilados, cervejas artesanais e produtos de tabacaria.
+            </p>
+            <p>
+              Nossa missão é proporcionar momentos inesquecíveis através de uma seleção cuidadosa de
+              produtos, sempre com atendimento personalizado e os melhores preços da região.
+            </p>
+
+            <div class="valores-grid">
+              <div class="valor-item">
+                <i class="fas fa-heart"></i>
+                <div>
+                  <h4>Paixão</h4>
+                  <p>Amor pelo que fazemos em cada atendimento</p>
+                </div>
+              </div>
+              <div class="valor-item">
+                <i class="fas fa-award"></i>
+                <div>
+                  <h4>Qualidade</h4>
+                  <p>Produtos selecionados com excelência</p>
+                </div>
+              </div>
+              <div class="valor-item">
+                <i class="fas fa-handshake"></i>
+                <div>
+                  <h4>Confiança</h4>
+                  <p>Transparência e honestidade sempre</p>
+                </div>
+              </div>
+              <div class="valor-item">
+                <i class="fas fa-truck"></i>
+                <div>
+                  <h4>Agilidade</h4>
+                  <p>Entrega rápida ou retirada na loja</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================
+       PÁGINA CONTATO
+       ============================================ -->
+  <div id="page-contato" class="page-section">
+    <section class="section" style="padding-top: 100px;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Contato</h2>
+          <p>Entre em contato conosco ou visite nossa loja</p>
+          <div class="divider"></div>
+        </div>
+
+        <div class="contato-grid">
+          <div class="contato-info-card">
+            <h3>Informações</h3>
+
+            <div class="contato-item">
+              <div class="contato-item-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h4>Endereço</h4>
+                <p>Rua Joaquim Marques Alves 90, Centro - Registro/SP</p>
+                <p><a href="https://www.google.com/maps/search/?api=1&query=Rua+Joaquim+Marques+Alves+90+Centro+Registro+SP" target="_blank" rel="noopener noreferrer">Abrir no Google Maps <i class="fas fa-external-link-alt"></i></a></p>
+              </div>
+            </div>
+
+            <div class="contato-item">
+              <div class="contato-item-icon">
+                <i class="fab fa-whatsapp"></i>
+              </div>
+              <div>
+                <h4>WhatsApp</h4>
+                <!-- PERSONALIZE: Substitua SEU_NUMERO_AQUI pelo seu número com código do país, ex: 5511999999999 -->
+                <p><a href="https://wa.me/5513996106235" target="_blank" rel="noopener noreferrer">Clique para conversar <i class="fas fa-external-link-alt"></i></a></p>
+              </div>
+            </div>
+
+            <div class="contato-item">
+              <div class="contato-item-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h4>Horário de Funcionamento</h4>
+                <!-- PERSONALIZE: Edite os horários abaixo conforme necessário -->
+                <p>Segunda a Sexta: 09:00 - 22:00</p>
+                <p>Sábado: 09:00 - 23:00</p>
+                <p>Domingo: 14:00 - 22:00</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mapa-container">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3645.8!2d-47.845!3d-24.487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDI5JzEzLjIiUyA0N8KwNTAnNDIuMCJX!5e0!3m2!1spt-BR!2sbr!4v1"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              title="Localização da Adega e Tabacaria Altas Horas">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3><i class="fas fa-wine-bottle"></i> Altas Horas</h3>
+        <p>Adega e Tabacaria Altas Horas - Os melhores vinhos, espumantes, destilados, cervejas especiais e produtos de tabacaria em Registro/SP.</p>
+        <div class="social-links">
+          <!-- PERSONALIZE: Adicione os links das suas redes sociais -->
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://wa.me/5513996106235" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Navegação</h3>
+        <ul>
+          <li><a href="#" onclick="navigateTo('inicio'); return false;"><i class="fas fa-angle-right"></i> Início</a></li>
+          <li><a href="#" onclick="navigateTo('produtos'); return false;"><i class="fas fa-angle-right"></i> Produtos</a></li>
+          <li><a href="#" onclick="navigateTo('sobre'); return false;"><i class="fas fa-angle-right"></i> Sobre</a></li>
+          <li><a href="#" onclick="navigateTo('contato'); return false;"><i class="fas fa-angle-right"></i> Contato</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Horário de Funcionamento</h3>
+        <!-- PERSONALIZE: Edite os horários abaixo conforme necessário -->
+        <p><i class="fas fa-clock"></i> Segunda a Sexta: 09:00 - 22:00</p>
+        <p><i class="fas fa-clock"></i> Sábado: 09:00 - 23:00</p>
+        <p><i class="fas fa-clock"></i> Domingo: 14:00 - 22:00</p>
+        <p style="margin-top: 15px;">
+          <i class="fas fa-map-marker-alt"></i> Rua Joaquim Marques Alves 90<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;Centro - Registro/SP
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Adega e Tabacaria Altas Horas. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       CARRINHO DRAWER
+       ============================================ -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3><i class="fas fa-shopping-cart"></i> Seu Carrinho</h3>
+      <button class="cart-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <!-- Preenchido via JavaScript -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-frete">
+        <input type="text" id="cepInput" placeholder="Digite seu CEP" maxlength="9" oninput="maskCep(this)">
+        <button onclick="calcularFrete()">Calcular</button>
+      </div>
+      <div class="frete-result" id="freteResult"></div>
+      <div class="cart-total">
+        <span>Total:</span>
+        <span class="total-value" id="cartTotal">R$ 0,00</span>
+      </div>
+      <button class="btn-checkout" id="btnCheckout" onclick="openCheckout()" disabled>
+        <i class="fas fa-check-circle"></i> Finalizar Compra
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============================================
+       MODAL CHECKOUT
+       ============================================ -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-clipboard-list"></i> Finalizar Pedido</h3>
+        <button class="modal-close" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="clienteNome"><i class="fas fa-user"></i> Nome completo *</label>
+          <input type="text" id="clienteNome" placeholder="Seu nome completo" required>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="retirarLoja" onchange="toggleEndereco()">
+          <label for="retirarLoja"><i class="fas fa-store"></i> Retirar na loja</label>
+        </div>
+
+        <div class="form-group" id="enderecoGroup">
+          <label for="clienteEndereco"><i class="fas fa-map-marker-alt"></i> Endereço completo de entrega *</label>
+          <input type="text" id="clienteEndereco" placeholder="Rua, número, bairro, cidade">
+        </div>
+
+        <div class="form-group">
+          <label for="formaPagamento"><i class="fas fa-credit-card"></i> Forma de Pagamento *</label>
+          <select id="formaPagamento">
+            <option value="">Selecione...</option>
+            <option value="PIX">PIX</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+            <option value="Cartão de Débito">Cartão de Débito</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="observacoes"><i class="fas fa-comment"></i> Observações (opcional)</label>
+          <textarea id="observacoes" placeholder="Alguma observação sobre o pedido?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeCheckout()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmarPedido()">
+          <i class="fas fa-check"></i> Revisar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MODAL CONFIRMAÇÃO
+       ============================================ -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+      <div class="modal-header" style="background: var(--cor-whatsapp);">
+        <h3><i class="fas fa-check-circle"></i> Confirmar Pedido</h3>
+        <button class="modal-close" onclick="closeConfirm()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="resumo-pedido" id="resumoPedido">
+          <!-- Preenchido via JavaScript -->
+        </div>
+        <div class="resumo-dados" id="resumoDados">
+          <!-- Preenchido via JavaScript -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeConfirm()">Voltar</button>
+        <button class="btn-confirm" onclick="enviarWhatsApp()">
+          <i class="fab fa-whatsapp"></i> Enviar via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       WHATSAPP FLUTUANTE
+       ============================================ -->
+  <div class="whatsapp-float">
+    <div class="whatsapp-tooltip">Fale conosco!</div>
+    <!-- PERSONALIZE: Substitua SEU_NUMERO_AQUI pelo seu número com código do país, ex: 5511999999999 -->
+    <a href="https://wa.me/5513996106235" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ============================================
+       JAVASCRIPT
+       ============================================ -->
+  <script>
+    /* ============================================
+       BANCO DE DADOS DE PRODUTOS
+       ============================================
+       Para ADICIONAR ou EDITAR produtos, modifique o array abaixo.
+       Cada produto deve ter: id, nome, categoria, descricao, preco, imagem, promocao.
+
+       CATEGORIAS DISPONÍVEIS:
+       - "Vinhos"
+       - "Espumantes"
+       - "Destilados"
+       - "Cervejas"
+       - "Tabacaria"
+       - "Acessórios"
+
+       IMAGENS:
+       Para substituir imagens placeholder, troque o link "https://via.placeholder.com/..."
+       por um link direto para a imagem do produto. Exemplos:
+       - Imagem local: "imagens/vinho-malbec.jpg" (crie uma pasta "imagens" no mesmo diretório)
+       - Imagem externa: "https://seu-site.com/imagem.jpg"
+
+       PROMOÇÃO:
+       Defina "promocao: true" para o produto aparecer na seção de promoções da página inicial.
+       
+       PAINEL ADMIN:
+       Os produtos podem ser gerenciados pelo painel em admin.html
+       Os dados salvos no admin substituem esta lista automaticamente.
+    */
+    let produtos = [
+      // ========== DESTILADOS ==========
+      {
+        id: 1,
+        nome: "Jim Beam Bourbon 1L",
+        categoria: "Destilados",
+        descricao: "Whisky bourbon americano, suave e encorpado",
+        preco: 119.90,
+        imagem: "produtos/Jim Beam.jpg",
+        promocao: false
+      },
+      {
+        id: 2,
+        nome: "Jim Beam Honey 1L",
+        categoria: "Destilados",
+        descricao: "Bourbon com mel, sabor adocicado e suave",
+        preco: 129.90,
+        imagem: "produtos/Jim Beam Honey.jpg",
+        promocao: true
+      },
+      {
+        id: 3,
+        nome: "Jack Daniel's Honey 1L",
+        categoria: "Destilados",
+        descricao: "Tennessee Whiskey com licor de mel",
+        preco: 179.90,
+        imagem: "produtos/Jack Daniel's Honey 1L.png",
+        promocao: false
+      },
+      {
+        id: 4,
+        nome: "Ballantine's 1L",
+        categoria: "Destilados",
+        descricao: "Whisky escocês blend, suave e equilibrado",
+        preco: 89.90,
+        imagem: "produtos/Ballantine's 1L.jpg",
+        promocao: false
+      },
+      {
+        id: 5,
+        nome: "Gin Gordon's 750ml",
+        categoria: "Destilados",
+        descricao: "Gin londrino clássico, perfeito para drinks",
+        preco: 69.90,
+        imagem: "produtos/Gin Gordon's 750ml.jpg",
+        promocao: false
+      },
+      {
+        id: 6,
+        nome: "Tanqueray 750ml",
+        categoria: "Destilados",
+        descricao: "Gin premium, notas de zimbro e especiarias",
+        preco: 129.90,
+        imagem: "produtos/Tanqueray 750ml.png",
+        promocao: true
+      },
+      {
+        id: 7,
+        nome: "Gin Beefeater 750ml",
+        categoria: "Destilados",
+        descricao: "Gin inglês tradicional, intenso e aromático",
+        preco: 99.90,
+        imagem: "produtos/beefeater.jpg",
+        promocao: false
+      },
+      // ========== CERVEJAS ==========
+      {
+        id: 8,
+        nome: "Heineken 330ml",
+        categoria: "Cervejas",
+        descricao: "Cerveja lager premium holandesa",
+        preco: 7.90,
+        imagem: "produtos/heineken.jpg",
+        promocao: false
+      },
+      {
+        id: 9,
+        nome: "Stella Artois 275ml",
+        categoria: "Cervejas",
+        descricao: "Cerveja belga premium, sabor sofisticado",
+        preco: 6.90,
+        imagem: "produtos/stella-artois.jpg",
+        promocao: false
+      },
+      {
+        id: 10,
+        nome: "Budweiser 330ml",
+        categoria: "Cervejas",
+        descricao: "Cerveja americana leve e refrescante",
+        preco: 5.90,
+        imagem: "produtos/budweiser.jpg",
+        promocao: false
+      },
+      // ========== ICE/DRINKS ==========
+      {
+        id: 11,
+        nome: "Smirnoff Ice 275ml",
+        categoria: "Ice",
+        descricao: "Bebida alcoólica sabor limão, refrescante",
+        preco: 8.90,
+        imagem: "produtos/smirnoff-ice.jpg",
+        promocao: false
+      },
+      {
+        id: 12,
+        nome: "Skol Beats 313ml",
+        categoria: "Ice",
+        descricao: "Drink pronto, leve e saboroso",
+        preco: 7.90,
+        imagem: "produtos/skol-beats.jpg",
+        promocao: false
+      },
+      {
+        id: 13,
+        nome: "Cabaré Ice 275ml",
+        categoria: "Ice",
+        descricao: "Bebida mista refrescante",
+        preco: 6.90,
+        imagem: "produtos/cabare-ice.jpg",
+        promocao: false
+      },
+      {
+        id: 14,
+        nome: "Döber 900ml",
+        categoria: "Ice",
+        descricao: "Bebida mista, diversos sabores disponíveis",
+        preco: 14.90,
+        imagem: "produtos/dober.jpg",
+        promocao: true
+      },
+      {
+        id: 15,
+        nome: "Rock's Ice 275ml",
+        categoria: "Ice",
+        descricao: "Ice refrescante, vários sabores",
+        preco: 5.90,
+        imagem: "produtos/rocks-ice.jpg",
+        promocao: false
+      },
+      // ========== REFRIGERANTES ==========
+      {
+        id: 16,
+        nome: "Coca-Cola Lata 350ml",
+        categoria: "Refrigerantes",
+        descricao: "O refrigerante mais famoso do mundo",
+        preco: 5.00,
+        imagem: "produtos/coca-cola.jpg",
+        promocao: false
+      },
+      {
+        id: 17,
+        nome: "Pepsi Lata 350ml",
+        categoria: "Refrigerantes",
+        descricao: "Refrigerante de cola refrescante",
+        preco: 4.50,
+        imagem: "produtos/pepsi.jpg",
+        promocao: false
+      },
+      {
+        id: 18,
+        nome: "Guaraná Antarctica Lata 350ml",
+        categoria: "Refrigerantes",
+        descricao: "O sabor brasileiro que todo mundo ama",
+        preco: 4.50,
+        imagem: "produtos/guarana-antarctica.jpg",
+        promocao: false
+      },
+      {
+        id: 19,
+        nome: "Fanta Laranja Lata 350ml",
+        categoria: "Refrigerantes",
+        descricao: "Refrigerante sabor laranja",
+        preco: 4.50,
+        imagem: "produtos/fanta-laranja.jpg",
+        promocao: false
+      },
+      {
+        id: 20,
+        nome: "Sprite Lata 350ml",
+        categoria: "Refrigerantes",
+        descricao: "Refrigerante limão, refrescância pura",
+        preco: 4.50,
+        imagem: "produtos/sprite.jpg",
+        promocao: false
+      },
+      {
+        id: 21,
+        nome: "Sukita Lata 350ml",
+        categoria: "Refrigerantes",
+        descricao: "Refrigerante sabor laranja",
+        preco: 4.00,
+        imagem: "produtos/sukita.jpg",
+        promocao: false
+      },
+      {
+        id: 22,
+        nome: "Água Mineral 500ml",
+        categoria: "Refrigerantes",
+        descricao: "Água mineral sem gás",
+        preco: 3.00,
+        imagem: "produtos/agua-mineral.jpg",
+        promocao: false
+      },
+      // ========== SALGADINHOS ==========
+      {
+        id: 23,
+        nome: "Doritos 96g",
+        categoria: "Salgadinhos",
+        descricao: "Salgadinho de milho sabor queijo nacho",
+        preco: 8.90,
+        imagem: "produtos/doritos.jpg",
+        promocao: false
+      },
+      {
+        id: 24,
+        nome: "Torcida Churrasco 45g",
+        categoria: "Salgadinhos",
+        descricao: "Salgadinho crocante sabor churrasco",
+        preco: 3.50,
+        imagem: "produtos/torcida.jpg",
+        promocao: false
+      },
+      {
+        id: 25,
+        nome: "Lobits 40g",
+        categoria: "Salgadinhos",
+        descricao: "Salgadinho sabor queijo, diversos sabores",
+        preco: 3.00,
+        imagem: "produtos/lobits.jpg",
+        promocao: false
+      },
+      {
+        id: 26,
+        nome: "Salgique Bacon 200g",
+        categoria: "Salgadinhos",
+        descricao: "Salgadinho crocante sabor bacon",
+        preco: 7.90,
+        imagem: "produtos/salgique-bacon.jpg",
+        promocao: false
+      },
+      // ========== TABACARIA ==========
+      {
+        id: 27,
+        nome: "Cigarro ZGY",
+        categoria: "Tabacaria",
+        descricao: "Maço de cigarro, diversas opções",
+        preco: 9.00,
+        imagem: "produtos/zgy.jpg",
+        promocao: false
+      },
+      {
+        id: 28,
+        nome: "Seda Bem Bolado King Size",
+        categoria: "Tabacaria",
+        descricao: "Papel para enrolar, tamanho grande",
+        preco: 4.00,
+        imagem: "produtos/bem-bolado-king.jpg",
+        promocao: false
+      },
+      {
+        id: 29,
+        nome: "Seda Bem Bolado Slim",
+        categoria: "Tabacaria",
+        descricao: "Papel para enrolar, fino e prático",
+        preco: 3.50,
+        imagem: "produtos/bem-bolado-slim.jpg",
+        promocao: false
+      },
+      {
+        id: 30,
+        nome: "Seda Zomo Perfect",
+        categoria: "Tabacaria",
+        descricao: "Papel de alta qualidade para enrolar",
+        preco: 4.00,
+        imagem: "produtos/zomo-perfect.jpg",
+        promocao: false
+      },
+      {
+        id: 31,
+        nome: "King Rolling Papers",
+        categoria: "Tabacaria",
+        descricao: "Seda premium tamanho king",
+        preco: 5.00,
+        imagem: "produtos/king-papers.jpg",
+        promocao: false
+      },
+      {
+        id: 32,
+        nome: "Isqueiro Clipper",
+        categoria: "Tabacaria",
+        descricao: "Isqueiro recarregável, diversas estampas",
+        preco: 12.00,
+        imagem: "produtos/clipper.jpg",
+        promocao: false
+      }
+    ];
+
+    /* ============================================
+       NÚMERO DO WHATSAPP
+       ============================================
+       PERSONALIZE: Substitua "SEU_NUMERO_AQUI" pelo número do WhatsApp
+       do seu negócio, incluindo código do país e DDD.
+       Exemplo: "5513999999999" (55 = Brasil, 13 = DDD, 999999999 = número)
+    */
+    const WHATSAPP_NUMERO = "5513996106235";
+
+    /* ============================================
+       VARIÁVEIS GLOBAIS
+       ============================================ */
+    let carrinho = [];
+    let filtroAtual = "Todos";
+    let paginaAtual = "inicio";
+
+    /* ============================================
+       INICIALIZAÇÃO
+       ============================================ */
+    document.addEventListener("DOMContentLoaded", function() {
+      // Carregar produtos do painel admin (se existirem)
+      const produtosSalvos = localStorage.getItem("adega_produtos");
+      if (produtosSalvos) {
+        try {
+          const produtosAdmin = JSON.parse(produtosSalvos);
+          if (Array.isArray(produtosAdmin) && produtosAdmin.length > 0) {
+            produtos = produtosAdmin;
+          }
+        } catch (e) {
+          console.log("Usando produtos padrão");
+        }
+      }
+
+      // Recuperar carrinho do localStorage
+      const carrinhoSalvo = localStorage.getItem("adega_carrinho");
+      if (carrinhoSalvo) {
+        try {
+          carrinho = JSON.parse(carrinhoSalvo);
+        } catch (e) {
+          carrinho = [];
+        }
+      }
+
+      renderProdutos();
+      renderPromocoes();
+      renderCarrinho();
+      updateCartCount();
+
+      // Scroll to top button
+      window.addEventListener("scroll", function() {
+        const btn = document.getElementById("scrollTop");
+        if (window.scrollY > 400) {
+          btn.classList.add("visible");
+        } else {
+          btn.classList.remove("visible");
+        }
+      });
+    });
+
+    /* ============================================
+       NAVEGAÇÃO SPA (Single Page Application)
+       ============================================ */
+    function navigateTo(page) {
+      // Esconder todas as páginas
+      document.querySelectorAll(".page-section").forEach(function(el) {
+        el.classList.remove("active-page");
+      });
+
+      // Mostrar página alvo
+      var target = document.getElementById("page-" + page);
+      if (target) {
+        target.classList.add("active-page");
+      }
+
+      // Atualizar menu ativo
+      document.querySelectorAll(".nav-menu a").forEach(function(el) {
+        el.classList.remove("active");
+        if (el.getAttribute("data-page") === page) {
+          el.classList.add("active");
+        }
+      });
+
+      // Fechar menu mobile
+      document.getElementById("navMenu").classList.remove("open");
+      document.getElementById("hamburger").classList.remove("active");
+
+      // Scroll para o topo
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      paginaAtual = page;
+    }
+
+    /* ============================================
+       MENU HAMBÚRGUER (MOBILE)
+       ============================================ */
+    function toggleMenu() {
+      document.getElementById("navMenu").classList.toggle("open");
+      document.getElementById("hamburger").classList.toggle("active");
+    }
+
+    /* ============================================
+       RENDERIZAÇÃO DE PRODUTOS
+       ============================================ */
+    function renderProdutos() {
+      var grid = document.getElementById("produtosGrid");
+      var busca = document.getElementById("searchInput").value.toLowerCase().trim();
+
+      var filtrados = produtos.filter(function(p) {
+        var matchCategoria = filtroAtual === "Todos" || p.categoria === filtroAtual;
+        var matchBusca = p.nome.toLowerCase().includes(busca);
+        return matchCategoria && matchBusca;
+      });
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = '<div class="sem-resultados"><i class="fas fa-search"></i><p>Nenhum produto encontrado.</p></div>';
+        return;
+      }
+
+      grid.innerHTML = filtrados.map(function(p) {
+        return createProductCardHTML(p);
+      }).join("");
+    }
+
+    function renderPromocoes() {
+      var grid = document.getElementById("promoGrid");
+      var promos = produtos.filter(function(p) { return p.promocao; });
+
+      grid.innerHTML = promos.map(function(p) {
+        return createProductCardHTML(p);
+      }).join("");
+    }
+
+    function createProductCardHTML(p) {
+      var badgeHTML = p.promocao ? '<span class="badge-promo"><i class="fas fa-fire"></i> Promoção</span>' : '';
+      var placeholderImg = 'https://via.placeholder.com/400x400/8B0000/FFFFFF?text=' + encodeURIComponent(p.nome.split(' ').slice(0,2).join('+'));
+      return '<div class="produto-card">' +
+        '<div class="produto-img">' +
+          badgeHTML +
+          '<span class="badge-categoria">' + escapeHTML(p.categoria) + '</span>' +
+          '<img src="' + escapeHTML(p.imagem) + '" alt="' + escapeHTML(p.nome) + '" loading="lazy" onerror="this.onerror=null; this.src=\'' + placeholderImg + '\'">' +
+        '</div>' +
+        '<div class="produto-info">' +
+          '<h3>' + escapeHTML(p.nome) + '</h3>' +
+          '<p class="descricao">' + escapeHTML(p.descricao) + '</p>' +
+          '<div class="produto-footer">' +
+            '<span class="preco"><small>R$</small> ' + formatPrice(p.preco) + '</span>' +
+            '<button class="btn-add" onclick="addToCart(' + p.id + ', this)">' +
+              '<i class="fas fa-cart-plus"></i> Adicionar' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    /* ============================================
+       FILTROS DE PRODUTOS
+       ============================================ */
+    function setFilter(categoria) {
+      filtroAtual = categoria;
+
+      document.querySelectorAll(".filtro-btn").forEach(function(btn) {
+        btn.classList.remove("active");
+        if (btn.textContent.trim() === categoria) {
+          btn.classList.add("active");
+        }
+      });
+
+      renderProdutos();
+    }
+
+    function filterByCategory(categoria) {
+      filtroAtual = categoria;
+
+      // Atualizar filtros visuais na página de produtos
+      setTimeout(function() {
+        document.querySelectorAll(".filtro-btn").forEach(function(btn) {
+          btn.classList.remove("active");
+          if (btn.textContent.trim() === categoria) {
+            btn.classList.add("active");
+          }
+        });
+        renderProdutos();
+      }, 100);
+    }
+
+    function filterProducts() {
+      renderProdutos();
+    }
+
+    /* ============================================
+       CARRINHO DE COMPRAS
+       ============================================ */
+    function addToCart(productId, btnElement) {
+      var product = produtos.find(function(p) { return p.id === productId; });
+      if (!product) return;
+
+      var existing = carrinho.find(function(item) { return item.id === productId; });
+
+      if (existing) {
+        existing.quantidade++;
+      } else {
+        carrinho.push({
+          id: product.id,
+          nome: product.nome,
+          preco: product.preco,
+          imagem: product.imagem,
+          quantidade: 1
+        });
+      }
+
+      saveCart();
+      updateCartCount();
+      renderCarrinho();
+
+      // Animação no botão
+      if (btnElement) {
+        btnElement.classList.add("added");
+        btnElement.innerHTML = '<i class="fas fa-check"></i> Adicionado';
+        setTimeout(function() {
+          btnElement.classList.remove("added");
+          btnElement.innerHTML = '<i class="fas fa-cart-plus"></i> Adicionar';
+        }, 1500);
+      }
+
+      showToast(product.nome + " adicionado ao carrinho!");
+    }
+
+    function removeFromCart(productId) {
+      carrinho = carrinho.filter(function(item) { return item.id !== productId; });
+      saveCart();
+      updateCartCount();
+      renderCarrinho();
+    }
+
+    function updateQuantity(productId, delta) {
+      var item = carrinho.find(function(i) { return i.id === productId; });
+      if (!item) return;
+
+      item.quantidade += delta;
+      if (item.quantidade <= 0) {
+        removeFromCart(productId);
+        return;
+      }
+
+      saveCart();
+      updateCartCount();
+      renderCarrinho();
+    }
+
+    function saveCart() {
+      localStorage.setItem("adega_carrinho", JSON.stringify(carrinho));
+    }
+
+    function updateCartCount() {
+      var total = carrinho.reduce(function(sum, item) { return sum + item.quantidade; }, 0);
+      document.getElementById("cartCount").textContent = total;
+    }
+
+    function getCartTotal() {
+      return carrinho.reduce(function(sum, item) { return sum + (item.preco * item.quantidade); }, 0);
+    }
+
+    function renderCarrinho() {
+      var container = document.getElementById("cartItems");
+      var btnCheckout = document.getElementById("btnCheckout");
+
+      if (carrinho.length === 0) {
+        container.innerHTML = '<div class="cart-empty">' +
+          '<i class="fas fa-shopping-cart"></i>' +
+          '<p>Seu carrinho está vazio</p>' +
+          '<p style="font-size: 13px; margin-top: 8px;">Explore nossos produtos e adicione ao carrinho</p>' +
+        '</div>';
+        btnCheckout.disabled = true;
+      } else {
+        container.innerHTML = carrinho.map(function(item) {
+          return '<div class="cart-item">' +
+            '<div class="cart-item-img">' +
+              '<img src="' + escapeHTML(item.imagem) + '" alt="' + escapeHTML(item.nome) + '">' +
+            '</div>' +
+            '<div class="cart-item-details">' +
+              '<h4>' + escapeHTML(item.nome) + '</h4>' +
+              '<span class="item-price">R$ ' + formatPrice(item.preco * item.quantidade) + '</span>' +
+              '<div class="cart-item-qty">' +
+                '<button class="qty-btn" onclick="updateQuantity(' + item.id + ', -1)"><i class="fas fa-minus"></i></button>' +
+                '<span>' + item.quantidade + '</span>' +
+                '<button class="qty-btn" onclick="updateQuantity(' + item.id + ', 1)"><i class="fas fa-plus"></i></button>' +
+              '</div>' +
+            '</div>' +
+            '<button class="cart-item-remove" onclick="removeFromCart(' + item.id + ')" title="Remover">' +
+              '<i class="fas fa-trash-alt"></i>' +
+            '</button>' +
+          '</div>';
+        }).join("");
+        btnCheckout.disabled = false;
+      }
+
+      document.getElementById("cartTotal").textContent = "R$ " + formatPrice(getCartTotal());
+    }
+
+    function toggleCart() {
+      document.getElementById("cartDrawer").classList.toggle("open");
+      document.getElementById("cartOverlay").classList.toggle("open");
+      document.body.style.overflow = document.getElementById("cartDrawer").classList.contains("open") ? "hidden" : "";
+    }
+
+    /* ============================================
+       CÁLCULO DE FRETE (SIMULAÇÃO)
+       ============================================ */
+    function maskCep(input) {
+      var v = input.value.replace(/\D/g, "");
+      if (v.length > 5) {
+        v = v.substring(0, 5) + "-" + v.substring(5, 8);
+      }
+      input.value = v;
+    }
+
+    function calcularFrete() {
+      var cep = document.getElementById("cepInput").value.replace(/\D/g, "");
+      var result = document.getElementById("freteResult");
+
+      if (cep.length !== 8) {
+        result.style.display = "block";
+        result.style.color = "#dc3545";
+        result.textContent = "Por favor, digite um CEP válido com 8 dígitos.";
+        return;
+      }
+
+      // Simulação de frete
+      var freteValor = (Math.random() * 10 + 5).toFixed(2).replace(".", ",");
+      result.style.display = "block";
+      result.style.color = "var(--cor-sucesso)";
+      result.innerHTML = '<i class="fas fa-truck"></i> Frete estimado: <strong>R$ ' + freteValor + '</strong> (1-2 dias úteis)';
+    }
+
+    /* ============================================
+       CHECKOUT (FINALIZAR PEDIDO)
+       ============================================ */
+    function openCheckout() {
+      if (carrinho.length === 0) return;
+
+      toggleCart(); // Fechar o carrinho
+      document.getElementById("checkoutModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function toggleEndereco() {
+      var checked = document.getElementById("retirarLoja").checked;
+      var grupo = document.getElementById("enderecoGroup");
+      var input = document.getElementById("clienteEndereco");
+
+      if (checked) {
+        grupo.style.opacity = "0.4";
+        grupo.style.pointerEvents = "none";
+        input.value = "";
+        input.placeholder = "Retirada na loja selecionada";
+      } else {
+        grupo.style.opacity = "1";
+        grupo.style.pointerEvents = "auto";
+        input.placeholder = "Rua, número, bairro, cidade";
+      }
+    }
+
+    function confirmarPedido() {
+      var nome = document.getElementById("clienteNome").value.trim();
+      var retirarLoja = document.getElementById("retirarLoja").checked;
+      var endereco = document.getElementById("clienteEndereco").value.trim();
+      var pagamento = document.getElementById("formaPagamento").value;
+      var observacoes = document.getElementById("observacoes").value.trim();
+
+      // Validações
+      if (!nome) {
+        alert("Por favor, informe seu nome.");
+        return;
+      }
+
+      if (!retirarLoja && !endereco) {
+        alert("Por favor, informe o endereço de entrega ou marque a opção de retirar na loja.");
+        return;
+      }
+
+      if (!pagamento) {
+        alert("Por favor, selecione a forma de pagamento.");
+        return;
+      }
+
+      // Montar resumo
+      var resumoHTML = '<h4><i class="fas fa-receipt"></i> Resumo do Pedido</h4>';
+      carrinho.forEach(function(item) {
+        resumoHTML += '<div class="resumo-item">' +
+          '<span>' + escapeHTML(item.nome) + ' × ' + item.quantidade + '</span>' +
+          '<span>R$ ' + formatPrice(item.preco * item.quantidade) + '</span>' +
+        '</div>';
+      });
+      resumoHTML += '<div class="resumo-total">' +
+        '<span>Total</span>' +
+        '<span>R$ ' + formatPrice(getCartTotal()) + '</span>' +
+      '</div>';
+
+      document.getElementById("resumoPedido").innerHTML = resumoHTML;
+
+      var dadosHTML = '<p><strong><i class="fas fa-user"></i> Cliente:</strong> ' + escapeHTML(nome) + '</p>';
+      if (retirarLoja) {
+        dadosHTML += '<p><strong><i class="fas fa-store"></i> Entrega:</strong> Retirar na loja</p>';
+      } else {
+        dadosHTML += '<p><strong><i class="fas fa-map-marker-alt"></i> Entrega:</strong> ' + escapeHTML(endereco) + '</p>';
+      }
+      dadosHTML += '<p><strong><i class="fas fa-credit-card"></i> Pagamento:</strong> ' + escapeHTML(pagamento) + '</p>';
+      if (observacoes) {
+        dadosHTML += '<p><strong><i class="fas fa-comment"></i> Observações:</strong> ' + escapeHTML(observacoes) + '</p>';
+      }
+
+      document.getElementById("resumoDados").innerHTML = dadosHTML;
+
+      // Fechar modal de checkout e abrir confirmação
+      closeCheckout();
+      document.getElementById("confirmModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeConfirm() {
+      document.getElementById("confirmModal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+
+
+    /* ============================================
+       ENVIAR PEDIDO VIA WHATSAPP
+       ============================================ */
+    function enviarWhatsApp() {
+      var nome = document.getElementById("clienteNome").value.trim();
+      var retirarLoja = document.getElementById("retirarLoja").checked;
+      var endereco = document.getElementById("clienteEndereco").value.trim();
+      var pagamento = document.getElementById("formaPagamento").value;
+      var observacoes = document.getElementById("observacoes").value.trim();
+
+      // Construir mensagem
+      var msg = "Olá, gostaria de fazer um pedido na *Adega e Tabacaria Altas Horas:*\n\n";
+      msg += "━━━━━━━━━━━━━━━━━━━━\n";
+      msg += "📋 *ITENS DO PEDIDO:*\n";
+      msg += "━━━━━━━━━━━━━━━━━━━━\n\n";
+
+      carrinho.forEach(function(item, index) {
+        msg += (index + 1) + ". " + item.nome + "\n";
+        msg += "   Qtd: " + item.quantidade + " × R$ " + formatPrice(item.preco) + " = *R$ " + formatPrice(item.preco * item.quantidade) + "*\n\n";
+      });
+
+      msg += "━━━━━━━━━━━━━━━━━━━━\n";
+      msg += "💰 *TOTAL: R$ " + formatPrice(getCartTotal()) + "*\n";
+      msg += "━━━━━━━━━━━━━━━━━━━━\n\n";
+
+      msg += "👤 *Cliente:* " + nome + "\n";
+
+      if (retirarLoja) {
+        msg += "📍 *Entrega:* Retirar na loja\n";
+      } else {
+        msg += "📍 *Endereço:* " + endereco + "\n";
+      }
+
+      msg += "💳 *Pagamento:* " + pagamento + "\n";
+
+      if (observacoes) {
+        msg += "📝 *Observações:* " + observacoes + "\n";
+      }
+
+      msg += "\n🏪 *Endereço da loja:* Rua Joaquim Marques Alves 90, Centro - Registro/SP\n\n";
+      
+      msg += "Por favor, confirme o pedido e informe o prazo de entrega. Obrigado! 🙏";
+
+      // Abrir WhatsApp
+      var url = "https://wa.me/" + encodeURIComponent(WHATSAPP_NUMERO) + "?text=" + encodeURIComponent(msg);
+      window.open(url, "_blank");
+
+      // Registrar vendas para estatísticas
+      registrarVenda(carrinho);
+
+      // Limpar carrinho após envio
+      carrinho = [];
+      saveCart();
+      updateCartCount();
+      renderCarrinho();
+
+      // Limpar formulário
+      document.getElementById("clienteNome").value = "";
+      document.getElementById("clienteEndereco").value = "";
+      document.getElementById("formaPagamento").value = "";
+      document.getElementById("observacoes").value = "";
+      document.getElementById("retirarLoja").checked = false;
+      toggleEndereco();
+
+      // Fechar modais
+      closeConfirm();
+
+      showToast("Pedido enviado com sucesso! Verifique o WhatsApp.");
+    }
+
+    /* ============================================
+       REGISTRO DE VENDAS PARA ESTATÍSTICAS
+       ============================================ */
+    function registrarVenda(itensVendidos) {
+      // Carregar histórico de vendas
+      var vendas = JSON.parse(localStorage.getItem("adega_vendas") || "{}");
+      var historico = JSON.parse(localStorage.getItem("adega_historico_pedidos") || "[]");
+      
+      var dataHoje = new Date().toISOString().slice(0, 10);
+      var agora = new Date().toISOString();
+      var totalPedido = 0;
+
+      // Registrar cada item vendido
+      itensVendidos.forEach(function(item) {
+        if (!vendas[item.id]) {
+          vendas[item.id] = {
+            id: item.id,
+            nome: item.nome,
+            categoria: item.categoria || "Outros",
+            totalVendido: 0,
+            quantidadeTotal: 0,
+            ultimaVenda: null
+          };
+        }
+        vendas[item.id].quantidadeTotal += item.quantidade;
+        vendas[item.id].totalVendido += item.preco * item.quantidade;
+        vendas[item.id].ultimaVenda = agora;
+        totalPedido += item.preco * item.quantidade;
+      });
+
+      // Salvar histórico do pedido
+      historico.push({
+        data: agora,
+        itens: itensVendidos.map(function(i) { 
+          return { id: i.id, nome: i.nome, qtd: i.quantidade, preco: i.preco }; 
+        }),
+        total: totalPedido
+      });
+
+      // Manter apenas os últimos 100 pedidos
+      if (historico.length > 100) {
+        historico = historico.slice(-100);
+      }
+
+      localStorage.setItem("adega_vendas", JSON.stringify(vendas));
+      localStorage.setItem("adega_historico_pedidos", JSON.stringify(historico));
+    }
+
+    /* ============================================
+       FUNÇÕES UTILITÁRIAS
+       ============================================ */
+
+    // Formatar preço: 89.9 -> "89,90"
+    function formatPrice(value) {
+      return value.toFixed(2).replace(".", ",");
+    }
+
+    // Escapar HTML para prevenir XSS
+    function escapeHTML(str) {
+      var div = document.createElement("div");
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    // Toast notification
+    function showToast(message) {
+      var container = document.getElementById("toastContainer");
+      var toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = '<i class="fas fa-check-circle"></i> ' + escapeHTML(message);
+      container.appendChild(toast);
+
+      setTimeout(function() {
+        toast.classList.add("toast-out");
+        setTimeout(function() {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 400);
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
