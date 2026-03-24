@@ -2195,7 +2195,7 @@
 
         <div class="form-group">
           <label for="formaPagamento"><i class="fas fa-credit-card"></i> Forma de Pagamento *</label>
-          <select id="formaPagamento" onchange="verificarPagamentoPix()">
+          <select id="formaPagamento">
             <option value="">Selecione...</option>
             <option value="PIX">PIX</option>
             <option value="Dinheiro">Dinheiro</option>
@@ -2204,8 +2204,8 @@
           </select>
         </div>
 
-        <!-- CONTAINER PIX / ABACATE PAY -->
-        <div class="pix-container" id="pixContainer">
+        <!-- CONTAINER PIX / ABACATE PAY (DESATIVADO) -->
+        <div class="pix-container" id="pixContainer" style="display:none !important;">
           <div class="pix-header">
             <img src="https://cdn.abacatepay.com/images/logo-abacate.svg" alt="Abacate Pay" style="height: 32px;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
             <span style="display:none; font-weight: bold; color: #4CAF50; font-size: 20px;">🥑 Abacate Pay</span>
@@ -3007,7 +3007,6 @@
       var endereco = document.getElementById("clienteEndereco").value.trim();
       var pagamento = document.getElementById("formaPagamento").value;
       var observacoes = document.getElementById("observacoes").value.trim();
-      var pixConfirmado = document.getElementById("pixConfirmado").checked;
 
       // Validações
       if (!nome) {
@@ -3022,12 +3021,6 @@
 
       if (!pagamento) {
         alert("Por favor, selecione a forma de pagamento.");
-        return;
-      }
-
-      // Validar confirmação do PIX
-      if (pagamento === "PIX" && !pixConfirmado) {
-        alert("Por favor, confirme que realizou o pagamento PIX marcando a caixa de confirmação.");
         return;
       }
 
@@ -3052,7 +3045,7 @@
       } else {
         dadosHTML += '<p><strong><i class="fas fa-map-marker-alt"></i> Entrega:</strong> ' + escapeHTML(endereco) + '</p>';
       }
-      dadosHTML += '<p><strong><i class="fas fa-credit-card"></i> Pagamento:</strong> ' + escapeHTML(pagamento) + '</p>';
+      dadosHTML += '<div style="margin-top:15px; padding:12px; background:#fff3e0; border-radius:8px; border-left:4px solid #ff9800; text-align:center;"><span style="font-size:22px; font-weight:800; color:#e65100;"><i class="fas fa-credit-card"></i> ' + escapeHTML(pagamento).toUpperCase() + '</span></div>';
       if (observacoes) {
         dadosHTML += '<p><strong><i class="fas fa-comment"></i> Observações:</strong> ' + escapeHTML(observacoes) + '</p>';
       }
@@ -3076,11 +3069,12 @@
     // ========================================
     // CONFIGURAÇÃO DO SERVIDOR BACKEND
     // ========================================
-    // URL do servidor backend (altere para produção)
-    const API_URL = "http://localhost:3001";
+    // URL do servidor backend (vazio = mesmo domínio, para Vercel serverless)
+    const API_URL = "";
     
     // Variáveis de controle do pagamento
     let pedidoAtual = null;
+    let billingIdAtual = null;
     let verificandoPagamento = false;
     let intervaloVerificacao = null;
 
@@ -3163,6 +3157,7 @@
 
         if (data.success) {
           pedidoAtual = data.pedidoId;
+          billingIdAtual = data.billingId;
           
           // Mostrar container do QR Code
           document.getElementById("qrCodeContainer").style.display = "block";
@@ -3195,7 +3190,7 @@
           };
 
           // Iniciar verificação automática de pagamento
-          iniciarVerificacaoPagamento(data.pedidoId);
+          iniciarVerificacaoPagamento(data.billingId);
 
           showToast("Pagamento criado! Escaneie o QR Code ou clique no botão.");
 
@@ -3213,7 +3208,7 @@
     }
 
     // Verificar status do pagamento periodicamente
-    function iniciarVerificacaoPagamento(pedidoId) {
+    function iniciarVerificacaoPagamento(billingId) {
       if (intervaloVerificacao) {
         clearInterval(intervaloVerificacao);
       }
@@ -3223,7 +3218,7 @@
       // Verificar a cada 3 segundos
       intervaloVerificacao = setInterval(async function() {
         try {
-          const response = await fetch(API_URL + "/api/verificar-pagamento/" + pedidoId);
+          const response = await fetch(API_URL + "/api/verificar-pagamento?billingId=" + billingId);
           const data = await response.json();
 
           if (data.pago) {
@@ -3306,22 +3301,16 @@
         msg += "📍 *Endereço:* " + endereco + "\n";
       }
 
-      msg += "💳 *Pagamento:* " + pagamento;
-      if (pagamento === "PIX") {
-        msg += " ✅ (PAGO)";
-      }
-      msg += "\n";
-
       if (observacoes) {
         msg += "📝 *Observações:* " + observacoes + "\n";
       }
 
       msg += "\n🏪 *Endereço da loja:* Rua Joaquim Marques Alves 90, Centro - Registro/SP\n\n";
-      
-      if (pagamento === "PIX") {
-        msg += "✅ *PAGAMENTO PIX REALIZADO*\n";
-        msg += "💰 Valor: R$ " + formatPrice(getCartTotal()) + "\n\n";
-      }
+
+      msg += "════════════════════\n";
+      msg += "💳 *FORMA DE PAGAMENTO:*\n";
+      msg += "*" + pagamento.toUpperCase() + "*\n";
+      msg += "════════════════════\n\n";
       
       msg += "Por favor, confirme o pedido e informe o prazo de entrega. Obrigado! 🙏";
 
@@ -3344,8 +3333,6 @@
       document.getElementById("formaPagamento").value = "";
       document.getElementById("observacoes").value = "";
       document.getElementById("retirarLoja").checked = false;
-      document.getElementById("pixConfirmado").checked = false;
-      document.getElementById("pixContainer").classList.remove("active");
       toggleEndereco();
 
       // Fechar modais
