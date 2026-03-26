@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/verificar-pagamento/:pedidoId", "destination": "/api/verificar-pagamento" },
+    { "source": "/api/pedido/:pedidoId", "destination": "/api/pedido" }
+  ]
+}

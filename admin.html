@@ -512,6 +512,103 @@
       background: #0f0f1a;
     }
 
+    .upload-zone {
+      border: 2px dashed #444;
+      border-radius: var(--radius);
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #0f0f1a;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--cor-secundaria);
+      background: rgba(218, 165, 32, 0.05);
+    }
+    .upload-zone i {
+      font-size: 2rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .upload-zone:hover i, .upload-zone.drag-over i {
+      color: var(--cor-secundaria);
+    }
+    .upload-zone p {
+      color: #888;
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+    .upload-zone small {
+      color: #555;
+      font-size: 0.75rem;
+    }
+    .upload-zone input[type="file"] {
+      display: none;
+    }
+    .upload-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .upload-actions .btn {
+      font-size: 0.8rem;
+      padding: 6px 14px;
+    }
+    .img-preview-container {
+      position: relative;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .img-preview-container .btn-remove-img {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(220, 53, 69, 0.9);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .img-preview-container .btn-remove-img:hover {
+      background: #dc3545;
+    }
+    .upload-or {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 10px 0 5px;
+    }
+    .manual-path-input {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .manual-path-input input {
+      flex: 1;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+    }
+    .toggle-manual {
+      background: none;
+      border: none;
+      color: var(--cor-secundaria);
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 4px 0;
+      text-decoration: underline;
+    }
+    .toggle-manual:hover {
+      color: #fff;
+    }
+
     /* TOAST */
     .toast {
       position: fixed;
@@ -733,9 +830,27 @@
 
         <div class="form-group">
           <label>Imagem</label>
-          <input type="text" id="produtoImagem" placeholder="produtos/nome-arquivo.jpg">
-          <small style="color: #888;">Coloque a imagem na pasta "produtos" e digite: produtos/nome.jpg</small>
-          <img id="previewImagem" class="preview-img" style="display: none;">
+          <input type="hidden" id="produtoImagem">
+          <div class="upload-zone" id="uploadZone">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Arraste uma imagem aqui ou clique para selecionar</p>
+            <small>JPG, PNG ou WebP • Máx. 5MB • Será redimensionada automaticamente</small>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp">
+          </div>
+          <div class="img-preview-container" id="imgPreviewContainer" style="display: none;">
+            <img id="previewImagem" class="preview-img">
+            <button type="button" class="btn-remove-img" onclick="removerImagem()" title="Remover imagem">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <button type="button" class="toggle-manual" id="toggleManual" onclick="toggleManualInput()">Digitar caminho manualmente</button>
+          <div id="manualPathContainer" style="display: none;">
+            <div class="manual-path-input">
+              <input type="text" id="produtoImagemManual" placeholder="produtos/nome-arquivo.jpg">
+              <button type="button" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.8rem;" onclick="aplicarCaminhoManual()">Aplicar</button>
+            </div>
+            <small style="color: #666;">Ex: produtos/nome.jpg</small>
+          </div>
         </div>
 
         <div class="form-group checkbox-group">
@@ -770,32 +885,32 @@
       { id: 4, nome: "Ballantine's 1L", categoria: "Destilados", descricao: "Whisky escocês blend, suave e equilibrado", preco: 89.90, imagem: "produtos/Ballantine's 1L.jpg", promocao: false },
       { id: 5, nome: "Gin Gordon's 750ml", categoria: "Destilados", descricao: "Gin londrino clássico, perfeito para drinks", preco: 69.90, imagem: "produtos/Gin Gordon's 750ml.jpg", promocao: false },
       { id: 6, nome: "Tanqueray 750ml", categoria: "Destilados", descricao: "Gin premium, notas de zimbro e especiarias", preco: 129.90, imagem: "produtos/Tanqueray 750ml.png", promocao: true },
-      { id: 7, nome: "Gin Beefeater 750ml", categoria: "Destilados", descricao: "Gin inglês tradicional, intenso e aromático", preco: 99.90, imagem: "produtos/beefeater.jpg", promocao: false },
-      { id: 8, nome: "Heineken 330ml", categoria: "Cervejas", descricao: "Cerveja lager premium holandesa", preco: 7.90, imagem: "produtos/heineken.jpg", promocao: false },
-      { id: 9, nome: "Stella Artois 275ml", categoria: "Cervejas", descricao: "Cerveja belga premium, sabor sofisticado", preco: 6.90, imagem: "produtos/stella-artois.jpg", promocao: false },
-      { id: 10, nome: "Budweiser 330ml", categoria: "Cervejas", descricao: "Cerveja americana leve e refrescante", preco: 5.90, imagem: "produtos/budweiser.jpg", promocao: false },
-      { id: 11, nome: "Smirnoff Ice 275ml", categoria: "Ice", descricao: "Bebida alcoólica sabor limão, refrescante", preco: 8.90, imagem: "produtos/smirnoff-ice.jpg", promocao: false },
-      { id: 12, nome: "Skol Beats 313ml", categoria: "Ice", descricao: "Drink pronto, leve e saboroso", preco: 7.90, imagem: "produtos/skol-beats.jpg", promocao: false },
-      { id: 13, nome: "Cabaré Ice 275ml", categoria: "Ice", descricao: "Bebida mista refrescante", preco: 6.90, imagem: "produtos/cabare-ice.jpg", promocao: false },
-      { id: 14, nome: "Döber 900ml", categoria: "Ice", descricao: "Bebida mista, diversos sabores disponíveis", preco: 14.90, imagem: "produtos/dober.jpg", promocao: true },
-      { id: 15, nome: "Rock's Ice 275ml", categoria: "Ice", descricao: "Ice refrescante, vários sabores", preco: 5.90, imagem: "produtos/rocks-ice.jpg", promocao: false },
-      { id: 16, nome: "Coca-Cola Lata 350ml", categoria: "Refrigerantes", descricao: "O refrigerante mais famoso do mundo", preco: 5.00, imagem: "produtos/coca-cola.jpg", promocao: false },
-      { id: 17, nome: "Pepsi Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante de cola refrescante", preco: 4.50, imagem: "produtos/pepsi.jpg", promocao: false },
-      { id: 18, nome: "Guaraná Antarctica Lata 350ml", categoria: "Refrigerantes", descricao: "O sabor brasileiro que todo mundo ama", preco: 4.50, imagem: "produtos/guarana-antarctica.jpg", promocao: false },
-      { id: 19, nome: "Fanta Laranja Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante sabor laranja", preco: 4.50, imagem: "produtos/fanta-laranja.jpg", promocao: false },
-      { id: 20, nome: "Sprite Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante limão, refrescância pura", preco: 4.50, imagem: "produtos/sprite.jpg", promocao: false },
-      { id: 21, nome: "Sukita Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante sabor laranja", preco: 4.00, imagem: "produtos/sukita.jpg", promocao: false },
-      { id: 22, nome: "Água Mineral 500ml", categoria: "Refrigerantes", descricao: "Água mineral sem gás", preco: 3.00, imagem: "produtos/agua-mineral.jpg", promocao: false },
-      { id: 23, nome: "Doritos 96g", categoria: "Salgadinhos", descricao: "Salgadinho de milho sabor queijo nacho", preco: 8.90, imagem: "produtos/doritos.jpg", promocao: false },
-      { id: 24, nome: "Torcida Churrasco 45g", categoria: "Salgadinhos", descricao: "Salgadinho crocante sabor churrasco", preco: 3.50, imagem: "produtos/torcida.jpg", promocao: false },
-      { id: 25, nome: "Lobits 40g", categoria: "Salgadinhos", descricao: "Salgadinho sabor queijo, diversos sabores", preco: 3.00, imagem: "produtos/lobits.jpg", promocao: false },
-      { id: 26, nome: "Salgique Bacon 200g", categoria: "Salgadinhos", descricao: "Salgadinho crocante sabor bacon", preco: 7.90, imagem: "produtos/salgique-bacon.jpg", promocao: false },
-      { id: 27, nome: "Cigarro ZGY", categoria: "Tabacaria", descricao: "Maço de cigarro, diversas opções", preco: 9.00, imagem: "produtos/zgy.jpg", promocao: false },
-      { id: 28, nome: "Seda Bem Bolado King Size", categoria: "Tabacaria", descricao: "Papel para enrolar, tamanho grande", preco: 4.00, imagem: "produtos/bem-bolado-king.jpg", promocao: false },
-      { id: 29, nome: "Seda Bem Bolado Slim", categoria: "Tabacaria", descricao: "Papel para enrolar, fino e prático", preco: 3.50, imagem: "produtos/bem-bolado-slim.jpg", promocao: false },
-      { id: 30, nome: "Seda Zomo Perfect", categoria: "Tabacaria", descricao: "Papel de alta qualidade para enrolar", preco: 4.00, imagem: "produtos/zomo-perfect.jpg", promocao: false },
-      { id: 31, nome: "King Rolling Papers", categoria: "Tabacaria", descricao: "Seda premium tamanho king", preco: 5.00, imagem: "produtos/king-papers.jpg", promocao: false },
-      { id: 32, nome: "Isqueiro Clipper", categoria: "Tabacaria", descricao: "Isqueiro recarregável, diversas estampas", preco: 12.00, imagem: "produtos/clipper.jpg", promocao: false }
+      { id: 7, nome: "Gin Beefeater 750ml", categoria: "Destilados", descricao: "Gin inglês tradicional, intenso e aromático", preco: 99.90, imagem: "produtos/Gin Beefeater 750ml.jpg", promocao: false },
+      { id: 8, nome: "Heineken 330ml", categoria: "Cervejas", descricao: "Cerveja lager premium holandesa", preco: 7.90, imagem: "produtos/Heineken 330ml.jpg", promocao: false },
+      { id: 9, nome: "Stella Artois 275ml", categoria: "Cervejas", descricao: "Cerveja belga premium, sabor sofisticado", preco: 6.90, imagem: "produtos/Stella Artois 275ml.png", promocao: false },
+      { id: 10, nome: "Budweiser 330ml", categoria: "Cervejas", descricao: "Cerveja americana leve e refrescante", preco: 5.90, imagem: "produtos/Budweiser 330ml.jpg", promocao: false },
+      { id: 11, nome: "Smirnoff Ice 275ml", categoria: "Ice", descricao: "Bebida alcoólica sabor limão, refrescante", preco: 8.90, imagem: "produtos/Smirnoff Ice 275ml.jpg", promocao: false },
+      { id: 12, nome: "Skol Beats 313ml", categoria: "Ice", descricao: "Drink pronto, leve e saboroso", preco: 7.90, imagem: "produtos/Skol Beats 313ml.png", promocao: false },
+      { id: 13, nome: "Cabaré Ice 275ml", categoria: "Ice", descricao: "Bebida mista refrescante", preco: 6.90, imagem: "produtos/Cabaré Ice 275ml.webp", promocao: false },
+      { id: 14, nome: "Döber 900ml", categoria: "Ice", descricao: "Bebida mista, diversos sabores disponíveis", preco: 14.90, imagem: "produtos/Döber 900ml.jpg", promocao: true },
+      { id: 15, nome: "Rock's Ice 275ml", categoria: "Ice", descricao: "Ice refrescante, vários sabores", preco: 5.90, imagem: "produtos/Rock's Ice 275ml.jpg", promocao: false },
+      { id: 16, nome: "Coca-Cola Lata 350ml", categoria: "Refrigerantes", descricao: "O refrigerante mais famoso do mundo", preco: 5.00, imagem: "produtos/Coca-Cola Lata 350ml.png", promocao: false },
+      { id: 17, nome: "Pepsi Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante de cola refrescante", preco: 4.50, imagem: "produtos/Pepsi Lata 350ml.png", promocao: false },
+      { id: 18, nome: "Guaraná Antarctica Lata 350ml", categoria: "Refrigerantes", descricao: "O sabor brasileiro que todo mundo ama", preco: 4.50, imagem: "produtos/Guaraná Antarctica Lata 350ml.jpg", promocao: false },
+      { id: 19, nome: "Fanta Laranja Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante sabor laranja", preco: 4.50, imagem: "produtos/Fanta Laranja Lata 350ml.jpg", promocao: false },
+      { id: 20, nome: "Sprite Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante limão, refrescância pura", preco: 4.50, imagem: "produtos/Sprite Lata 350ml.jpg", promocao: false },
+      { id: 21, nome: "Sukita Lata 350ml", categoria: "Refrigerantes", descricao: "Refrigerante sabor laranja", preco: 4.00, imagem: "produtos/Sukita Lata 350ml.jpg", promocao: false },
+      { id: 22, nome: "Água Mineral 500ml", categoria: "Refrigerantes", descricao: "Água mineral sem gás", preco: 3.00, imagem: "produtos/Água Mineral 500ml.jpg", promocao: false },
+      { id: 23, nome: "Doritos 96g", categoria: "Salgadinhos", descricao: "Salgadinho de milho sabor queijo nacho", preco: 8.90, imagem: "produtos/Doritos 96g.jpg", promocao: false },
+      { id: 24, nome: "Torcida Churrasco 45g", categoria: "Salgadinhos", descricao: "Salgadinho crocante sabor churrasco", preco: 3.50, imagem: "produtos/Torcida Churrasco 45g.jpg", promocao: false },
+      { id: 25, nome: "Lobits 40g", categoria: "Salgadinhos", descricao: "Salgadinho sabor queijo, diversos sabores", preco: 3.00, imagem: "produtos/Lobits 40g.png", promocao: false },
+      { id: 26, nome: "Salgique Bacon 200g", categoria: "Salgadinhos", descricao: "Salgadinho crocante sabor bacon", preco: 7.90, imagem: "produtos/Salgique Bacon 200g.jpg", promocao: false },
+      { id: 27, nome: "Cigarro ZGY", categoria: "Tabacaria", descricao: "Maço de cigarro, diversas opções", preco: 9.00, imagem: "produtos/Cigarro ZGY.png", promocao: false },
+      { id: 28, nome: "Seda Bem Bolado King Size", categoria: "Tabacaria", descricao: "Papel para enrolar, tamanho grande", preco: 4.00, imagem: "produtos/Seda Bem Bolado King Size.jpg", promocao: false },
+      { id: 29, nome: "Seda Bem Bolado Slim", categoria: "Tabacaria", descricao: "Papel para enrolar, fino e prático", preco: 3.50, imagem: "produtos/Seda Bem Bolado Slim.jpg", promocao: false },
+      { id: 30, nome: "Seda Zomo Perfect", categoria: "Tabacaria", descricao: "Papel de alta qualidade para enrolar", preco: 4.00, imagem: "produtos/Seda Zomo Perfect.png", promocao: false },
+      { id: 31, nome: "King Rolling Papers", categoria: "Tabacaria", descricao: "Seda premium tamanho king", preco: 5.00, imagem: "produtos/King Rolling Papers.jpg", promocao: false },
+      { id: 32, nome: "Isqueiro Clipper", categoria: "Tabacaria", descricao: "Isqueiro recarregável, diversas estampas", preco: 12.00, imagem: "produtos/Isqueiro Clipper.jpg", promocao: false }
     ];
 
     let produtos = [];
@@ -804,19 +919,37 @@
        INICIALIZAÇÃO
        ============================================ */
     document.addEventListener("DOMContentLoaded", function() {
-      checkAuth();
       carregarProdutos();
+      checkAuth();
       
-      // Preview de imagem
-      document.getElementById("produtoImagem").addEventListener("input", function() {
-        const preview = document.getElementById("previewImagem");
-        if (this.value) {
-          preview.src = this.value;
-          preview.style.display = "block";
-          preview.onerror = function() { this.style.display = "none"; };
+      // Upload de imagem
+      const uploadZone = document.getElementById('uploadZone');
+      const fileInput = document.getElementById('fileInput');
+
+      uploadZone.addEventListener('click', () => fileInput.click());
+
+      uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.classList.add('drag-over');
+      });
+      uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('drag-over');
+      });
+      uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          processarImagem(file);
         } else {
-          preview.style.display = "none";
+          showToast('Selecione um arquivo de imagem válido!', 'error');
         }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) processarImagem(file);
+        e.target.value = '';
       });
     });
 
@@ -859,20 +992,32 @@
     /* ============================================
        CRUD PRODUTOS
        ============================================ */
+    // Versão dos produtos padrão - deve ser igual ao PRODUTOS_VERSAO do index.html
+    const PRODUTOS_VERSAO = 2;
+
     function carregarProdutos() {
-      const saved = localStorage.getItem("adega_produtos_admin");
-      if (saved) {
-        produtos = JSON.parse(saved);
+      const versaoSalva = localStorage.getItem("adega_produtos_versao");
+      if (versaoSalva && parseInt(versaoSalva) >= PRODUTOS_VERSAO) {
+        const saved = localStorage.getItem("adega_produtos_admin");
+        if (saved) {
+          produtos = JSON.parse(saved);
+        } else {
+          produtos = [...produtosPadrao];
+          salvarStorage();
+        }
       } else {
+        // Versão nova: resetar para os padrões atualizados
         produtos = [...produtosPadrao];
         salvarStorage();
+        localStorage.setItem("adega_produtos_versao", PRODUTOS_VERSAO);
+        showToast("Produtos atualizados para nova versão!", "success");
       }
     }
 
     function salvarStorage() {
       localStorage.setItem("adega_produtos_admin", JSON.stringify(produtos));
-      // Também salva no formato que o site principal usa
       localStorage.setItem("adega_produtos", JSON.stringify(produtos));
+      localStorage.setItem("adega_produtos_versao", PRODUTOS_VERSAO);
     }
 
     function renderTable() {
@@ -1055,6 +1200,11 @@
       document.getElementById("modalOverlay").classList.add("active");
       document.getElementById("modalTitle").innerHTML = id ? '<i class="fas fa-edit"></i> Editar Produto' : '<i class="fas fa-box"></i> Novo Produto';
       
+      // Reset manual path
+      document.getElementById('manualPathContainer').style.display = 'none';
+      document.getElementById('toggleManual').textContent = 'Digitar caminho manualmente';
+      document.getElementById('produtoImagemManual').value = '';
+
       if (id) {
         const p = produtos.find(x => x.id === id);
         document.getElementById("produtoId").value = p.id;
@@ -1065,10 +1215,10 @@
         document.getElementById("produtoImagem").value = p.imagem || '';
         document.getElementById("produtoPromocao").checked = p.promocao;
         
-        const preview = document.getElementById("previewImagem");
         if (p.imagem) {
-          preview.src = p.imagem;
-          preview.style.display = "block";
+          mostrarPreview(p.imagem);
+        } else {
+          esconderPreview();
         }
       } else {
         document.getElementById("produtoId").value = '';
@@ -1078,7 +1228,88 @@
         document.getElementById("produtoPreco").value = '';
         document.getElementById("produtoImagem").value = '';
         document.getElementById("produtoPromocao").checked = false;
-        document.getElementById("previewImagem").style.display = "none";
+        esconderPreview();
+      }
+    }
+
+    /* ============================================
+       UPLOAD E PROCESSAMENTO DE IMAGEM
+       ============================================ */
+    function processarImagem(file) {
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('Imagem muito grande! Máximo 5MB.', 'error');
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        showToast('Selecione um arquivo de imagem válido!', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const MAX = 400;
+          let w = img.width, h = img.height;
+          if (w > MAX || h > MAX) {
+            if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+            else { w = Math.round(w * MAX / h); h = MAX; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          document.getElementById('produtoImagem').value = dataUrl;
+          mostrarPreview(dataUrl);
+          showToast('Imagem carregada com sucesso!', 'success');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function mostrarPreview(src) {
+      const preview = document.getElementById('previewImagem');
+      const container = document.getElementById('imgPreviewContainer');
+      const uploadZone = document.getElementById('uploadZone');
+      preview.src = src;
+      container.style.display = 'inline-block';
+      uploadZone.style.display = 'none';
+      preview.onerror = function() {
+        esconderPreview();
+        showToast('Erro ao carregar imagem', 'error');
+      };
+    }
+
+    function esconderPreview() {
+      document.getElementById('imgPreviewContainer').style.display = 'none';
+      document.getElementById('uploadZone').style.display = 'block';
+    }
+
+    function removerImagem() {
+      document.getElementById('produtoImagem').value = '';
+      esconderPreview();
+    }
+
+    function toggleManualInput() {
+      const container = document.getElementById('manualPathContainer');
+      const btn = document.getElementById('toggleManual');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        btn.textContent = 'Ocultar campo manual';
+      } else {
+        container.style.display = 'none';
+        btn.textContent = 'Digitar caminho manualmente';
+      }
+    }
+
+    function aplicarCaminhoManual() {
+      const path = document.getElementById('produtoImagemManual').value.trim();
+      if (path) {
+        document.getElementById('produtoImagem').value = path;
+        mostrarPreview(path);
       }
     }
 
