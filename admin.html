@@ -380,13 +380,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 11px 14px;
-      background: rgba(255,255,255,0.015);
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.02);
       border-radius: var(--radius-sm);
-      border: 1px solid transparent;
+      border: 1px solid rgba(255,255,255,0.04);
       transition: var(--transicao);
+      gap: 12px;
     }
-    .pedido-item:hover { border-color: var(--cor-borda); }
+
+    .pedido-item:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: var(--cor-borda);
+    }
     .pedido-item .data { color: #555; font-size: 0.7rem; }
     .pedido-item .itens { color: #aaa; font-size: 0.8rem; }
     .pedido-item .pedido-total { color: var(--cor-secundaria); font-weight: 700; font-size: 0.9rem; }
@@ -870,9 +875,7 @@
               <div class="dashboard-card full-width">
                 <div class="dashboard-header">
                   <h3><i class="fas fa-history" style="color: var(--cor-secundaria);"></i> Últimos Pedidos</h3>
-                  <button class="btn btn-outline btn-sm" onclick="limparHistorico()">
-                    <i class="fas fa-trash"></i> Limpar
-                  </button>
+                  <span class="badge-info">10 últimos</span>
                 </div>
                 <div class="pedidos-list" id="ultimosPedidos">
                   <div class="empty-state">
@@ -1400,7 +1403,7 @@
       // Atualizar dashboard de vendas
       renderMaisVendidos(vendas);
       renderMenosVendidos(vendas);
-      renderUltimosPedidos(historico);
+      renderUltimosPedidos();
     }
 
     /* ============================================
@@ -1636,30 +1639,39 @@
       }).join('');
     }
 
-    function renderUltimosPedidos(historico) {
+    function renderUltimosPedidos() {
       const container = document.getElementById("ultimosPedidos");
-      
-      if (historico.length === 0) {
+
+      if (pedidosFirebase.length === 0) {
         container.innerHTML = '<div class="empty-state"><i class="fas fa-receipt"></i><p>Nenhum pedido registrado</p></div>';
         return;
       }
 
-      const ultimos = historico.slice(-10).reverse();
-      
-      container.innerHTML = ultimos.map(pedido => {
-        const data = new Date(pedido.data);
+      const ultimos = pedidosFirebase.slice(0, 10);
+      const statusIcons = { novo: 'fa-circle', preparando: 'fa-fire', pronto: 'fa-check-circle', entregue: 'fa-truck' };
+      const statusColors = { novo: '#e53935', preparando: '#ff9800', pronto: '#2196F3', entregue: '#4CAF50' };
+      const statusLabels = { novo: 'Novo', preparando: 'Preparando', pronto: 'Pronto', entregue: 'Entregue' };
+
+      container.innerHTML = ultimos.map(function(pedido) {
+        const data = pedido.criadoEm ? new Date(pedido.criadoEm.seconds * 1000) : new Date();
         const dataFormatada = data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
-        const itensTexto = pedido.itens.map(i => `${i.qtd}x ${i.nome}`).join(', ');
-        
-        return `
-          <div class="pedido-item">
-            <div class="pedido-info">
-              <div class="data"><i class="fas fa-clock"></i> ${dataFormatada}</div>
-              <div class="itens">${escapeHTML(itensTexto.substring(0, 80))}${itensTexto.length > 80 ? '...' : ''}</div>
-            </div>
-            <div class="pedido-total">R$ ${pedido.total.toFixed(2).replace('.', ',')}</div>
-          </div>
-        `;
+        const itensTexto = (pedido.itens || []).map(function(i) { return i.qtd + 'x ' + i.nome; }).join(', ');
+        const st = pedido.status || 'novo';
+        const stColor = statusColors[st] || '#999';
+        const stIcon = statusIcons[st] || 'fa-circle';
+        const stLabel = statusLabels[st] || st;
+
+        return '<div class="pedido-item" style="border-left: 3px solid ' + stColor + ';">' +
+          '<div class="pedido-info" style="flex:1;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
+              '<div class="pedido-cliente-nome" style="color:#fff;font-weight:600;font-size:13px;"><i class="fas fa-user" style="color:' + stColor + ';margin-right:6px;"></i>' + escapeHTML(pedido.cliente || 'Cliente') + '</div>' +
+              '<span style="font-size:11px;color:' + stColor + ';background:' + stColor + '22;padding:2px 8px;border-radius:10px;font-weight:600;"><i class="fas ' + stIcon + '" style="margin-right:4px;"></i>' + stLabel + '</span>' +
+            '</div>' +
+            '<div class="data" style="margin-bottom:3px;"><i class="fas fa-clock"></i> ' + dataFormatada + '</div>' +
+            '<div class="itens">' + escapeHTML(itensTexto.length > 80 ? itensTexto.substring(0, 80) + '...' : itensTexto) + '</div>' +
+          '</div>' +
+          '<div class="pedido-total">R$ ' + (pedido.total || 0).toFixed(2).replace('.', ',') + '</div>' +
+        '</div>';
       }).join('');
     }
 
@@ -1968,6 +1980,7 @@
             primeiraCarregada = false;
 
             renderPedidosFirebase();
+            renderUltimosPedidos();
             atualizarBadgeNovos();
             // Refresh faturamento on new orders
             calcularFaturamentoFirebase();
