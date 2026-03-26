@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -758,6 +758,9 @@
           <a onclick="navigateTo('produtos')" data-page="produtos">
             <i class="fas fa-box"></i> Produtos
           </a>
+          <a onclick="navigateTo('combos')" data-page="combos">
+            <i class="fas fa-cubes"></i> Combos
+          </a>
           <a onclick="navigateTo('dados')" data-page="dados">
             <i class="fas fa-database"></i> Backup
           </a>
@@ -935,7 +938,88 @@
             </div>
           </div>
 
-          <!-- ===== PAGE: BACKUP ===== -->
+          
+          <!-- ===== PAGE: COMBOS ===== -->
+          <div class="admin-page" id="page-combos">
+            <div class="section-header">
+              <h2><i class="fas fa-cubes"></i> Gerenciar Combos</h2>
+              <button class="btn btn-success btn-sm" onclick="openComboModal()">
+                <i class="fas fa-plus"></i> Novo Combo
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Itens</th>
+                    <th>Preo Normal</th>
+                    <th>Preo Pack</th>
+                    <th>Economia</th>
+                    <th>Status</th>
+                    <th>Aes</th>
+                  </tr>
+                </thead>
+                <tbody id="combosTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===== PAGE: COMBOS ===== -->
+          <div class="admin-page" id="page-combos">
+            <div class="section-header">
+              <h2><i class="fas fa-cubes"></i> Gerenciar Combos</h2>
+              <button class="btn btn-success btn-sm" onclick="openComboModal()">
+                <i class="fas fa-plus"></i> Novo Combo
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Itens</th>
+                    <th>Preo Normal</th>
+                    <th>Preo Pack</th>
+                    <th>Economia</th>
+                    <th>Status</th>
+                    <th>Aes</th>
+                  </tr>
+                </thead>
+                <tbody id="combosTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===== PAGE: COMBOS ===== -->
+          <div class="admin-page" id="page-combos">
+            <div class="section-header">
+              <h2><i class="fas fa-cubes"></i> Gerenciar Combos</h2>
+              <button class="btn btn-success btn-sm" onclick="openComboModal()">
+                <i class="fas fa-plus"></i> Novo Combo
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Itens</th>
+                    <th>Preo Normal</th>
+                    <th>Preo Pack</th>
+                    <th>Economia</th>
+                    <th>Status</th>
+                    <th>Aes</th>
+                  </tr>
+                </thead>
+                <tbody id="combosTable"></tbody>
+              </table>
+            </div>
+          </div>
+<!-- ===== PAGE: BACKUP ===== -->
           <div class="admin-page" id="page-dados">
             <div class="section-header">
               <h2><i class="fas fa-database"></i> Backup de Dados</h2>
@@ -1035,6 +1119,52 @@
     </div>
   </div>
 
+
+  <!-- MODAL COMBO -->
+  <div class="modal-overlay" id="comboModalOverlay" onclick="closeComboModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h2 id="comboModalTitle"><i class="fas fa-cubes"></i> Novo Combo</h2>
+      <form onsubmit="salvarCombo(event)">
+        <input type="hidden" id="comboId">
+
+        <div class="form-group">
+          <label>Nome do Combo *</label>
+          <input type="text" id="comboNome" placeholder="Ex: Pack Heineken 6 unidades" required>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-icons"></i> cone (classe Font Awesome)</label>
+          <input type="text" id="comboIcone" placeholder="fas fa-beer" value="fas fa-cubes">
+        </div>
+
+        <div class="form-group">
+          <label>Itens do Combo</label>
+          <div id="comboItensContainer"></div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addComboItem()" style="margin-top: 8px;">
+            <i class="fas fa-plus"></i> Adicionar Item
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label>Preo do Pack (R$) *</label>
+          <input type="number" id="comboPrecoPack" step="0.01" min="0" placeholder="0.00" required>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="comboAtivo" checked>
+          <label for="comboAtivo" style="margin: 0;">Combo Ativo</label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeComboModal()">Cancelar</button>
+          <button type="submit" class="btn btn-success">
+            <i class="fas fa-save"></i> Salvar Combo
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     /* ============================================
        CONFIGURAÇÃO
@@ -1049,6 +1179,7 @@
       dashboard: { title: 'Dashboard', subtitle: 'Visão geral do seu negócio' },
       pedidos: { title: 'Pedidos', subtitle: 'Gerenciar pedidos em tempo real' },
       produtos: { title: 'Produtos', subtitle: 'Gerenciar catálogo de produtos' },
+      combos: { title: 'Combos', subtitle: 'Gerenciar packs e combos promocionais' },
       dados: { title: 'Backup', subtitle: 'Exportar e importar dados' }
     };
 
@@ -1120,6 +1251,7 @@
        ============================================ */
     document.addEventListener("DOMContentLoaded", function() {
       carregarProdutos();
+      carregarPacks();
       checkAuth();
       
       // Upload de imagem
@@ -1183,6 +1315,7 @@
       document.getElementById("loginContainer").style.display = "none";
       document.getElementById("adminContainer").style.display = "block";
       renderTable();
+      renderCombosTable();
       updateStats();
       populateCategorias();
       iniciarListenerPedidos();
@@ -1959,6 +2092,190 @@
       document.querySelectorAll('.filtro-pedido').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
       renderPedidosFirebase();
+    }
+
+    /* ============================================
+       COMBOS / PACKS PROMOCIONAIS
+       ============================================ */
+    let packsPromocionais = [];
+
+    const packsDefault = [
+      { id: 1, nome: 'Pack Heineken 6 unidades', itens: [{ produtoId: 8, quantidade: 6 }], precoPack: 39.90, icone: 'fas fa-beer', ativo: true },
+      { id: 2, nome: 'Combo Smirnoff Ice 4 unidades', itens: [{ produtoId: 11, quantidade: 4 }], precoPack: 29.90, icone: 'fas fa-cocktail', ativo: true },
+      { id: 3, nome: 'Combo Whisky Jim Beam + Coca-Cola', itens: [{ produtoId: 1, quantidade: 1 }, { produtoId: 16, quantidade: 2 }], precoPack: 119.90, icone: 'fas fa-glass-whiskey', ativo: true },
+      { id: 4, nome: 'Pack Stella Artois 6 unidades', itens: [{ produtoId: 9, quantidade: 6 }], precoPack: 34.90, icone: 'fas fa-beer', ativo: true },
+      { id: 5, nome: 'Combo Gin Tnica (Tanqueray + Schweppes)', itens: [{ produtoId: 6, quantidade: 1 }, { produtoId: 22, quantidade: 2 }], precoPack: 129.90, icone: 'fas fa-wine-bottle', ativo: true },
+      { id: 6, nome: 'Pack Budweiser 6 unidades', itens: [{ produtoId: 10, quantidade: 6 }], precoPack: 29.90, icone: 'fas fa-beer', ativo: true }
+    ];
+
+    function carregarPacks() {
+      const saved = localStorage.getItem('adega_packs');
+      if (saved) {
+        try {
+          packsPromocionais = JSON.parse(saved);
+        } catch(e) {
+          packsPromocionais = JSON.parse(JSON.stringify(packsDefault));
+        }
+      } else {
+        packsPromocionais = JSON.parse(JSON.stringify(packsDefault));
+      }
+      renderCombosTable();
+    }
+
+    function salvarPacks() {
+      localStorage.setItem('adega_packs', JSON.stringify(packsPromocionais));
+    }
+
+    function getPrecoNormalPack(pack) {
+      let total = 0;
+      pack.itens.forEach(function(item) {
+        const p = produtos.find(function(pr) { return pr.id === item.produtoId; });
+        if (p) total += p.preco * item.quantidade;
+      });
+      return total;
+    }
+
+    function renderCombosTable() {
+      const tb = document.getElementById('combosTable');
+      if (!tb) return;
+      if (packsPromocionais.length === 0) {
+        tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#666;padding:30px;">Nenhum combo cadastrado</td></tr>';
+        return;
+      }
+      tb.innerHTML = packsPromocionais.map(function(pack) {
+        const precoNormal = getPrecoNormalPack(pack);
+        const economia = precoNormal - pack.precoPack;
+        const itensDesc = pack.itens.map(function(item) {
+          const p = produtos.find(function(pr) { return pr.id === item.produtoId; });
+          return p ? item.quantidade + 'x ' + p.nome : item.quantidade + 'x Produto #' + item.produtoId;
+        }).join(', ');
+        
+        return '<tr>' +
+          '<td><strong>' + escapeHTML(pack.nome) + '</strong></td>' +
+          '<td style="font-size:12px;">' + escapeHTML(itensDesc) + '</td>' +
+          '<td>R$ ' + precoNormal.toFixed(2).replace('.', ',') + '</td>' +
+          '<td style="color:var(--cor-secundaria);font-weight:700;">R$ ' + pack.precoPack.toFixed(2).replace('.', ',') + '</td>' +
+          '<td style="color:#28a745;font-weight:600;">-R$ ' + economia.toFixed(2).replace('.', ',') + '</td>' +
+          '<td>' + (pack.ativo ? '<span style="color:#4CAF50;font-weight:600;">Ativo</span>' : '<span style="color:#999;">Inativo</span>') + '</td>' +
+          '<td><div class="actions-btns">' +
+            '<button class="btn btn-outline btn-sm" onclick="editarCombo(' + pack.id + ')"><i class="fas fa-edit"></i></button>' +
+            '<button class="btn btn-sm" style="background:#dc3545;color:#fff;" onclick="excluirCombo(' + pack.id + ')"><i class="fas fa-trash"></i></button>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function openComboModal(packId) {
+      document.getElementById('comboId').value = '';
+      document.getElementById('comboNome').value = '';
+      document.getElementById('comboIcone').value = 'fas fa-cubes';
+      document.getElementById('comboPrecoPack').value = '';
+      document.getElementById('comboAtivo').checked = true;
+      document.getElementById('comboItensContainer').innerHTML = '';
+      document.getElementById('comboModalTitle').innerHTML = '<i class="fas fa-cubes"></i> Novo Combo';
+      addComboItem();
+      document.getElementById('comboModalOverlay').classList.add('active');
+    }
+
+    function closeComboModal(e) {
+      if (!e || e.target === document.getElementById('comboModalOverlay')) {
+        document.getElementById('comboModalOverlay').classList.remove('active');
+      }
+    }
+
+    function addComboItem(prodId, qtd) {
+      const container = document.getElementById('comboItensContainer');
+      const idx = container.children.length;
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex;gap:8px;align-items:center;margin-bottom:8px;';
+
+      let optionsHTML = '<option value="">Selecione produto...</option>';
+      produtos.forEach(function(p) {
+        const sel = (prodId && p.id === prodId) ? ' selected' : '';
+        optionsHTML += '<option value="' + p.id + '"' + sel + '>' + escapeHTML(p.nome) + ' (R$ ' + p.preco.toFixed(2).replace('.', ',') + ')</option>';
+      });
+
+      div.innerHTML = '<select class="combo-prod-select" style="flex:1;padding:8px;border:1px solid #333;border-radius:6px;background:#1a1a1a;color:#fff;font-size:13px;" required>' + optionsHTML + '</select>' +
+        '<input type="number" class="combo-prod-qty" value="' + (qtd || 1) + '" min="1" style="width:70px;padding:8px;border:1px solid #333;border-radius:6px;background:#1a1a1a;color:#fff;text-align:center;" placeholder="Qtd">' +
+        '<button type="button" onclick="this.parentElement.remove()" style="background:#dc3545;color:#fff;border:none;border-radius:6px;padding:8px 10px;cursor:pointer;"><i class="fas fa-times"></i></button>';
+      container.appendChild(div);
+    }
+
+    function editarCombo(packId) {
+      const pack = packsPromocionais.find(function(p) { return p.id === packId; });
+      if (!pack) return;
+      document.getElementById('comboId').value = pack.id;
+      document.getElementById('comboNome').value = pack.nome;
+      document.getElementById('comboIcone').value = pack.icone || 'fas fa-cubes';
+      document.getElementById('comboPrecoPack').value = pack.precoPack;
+      document.getElementById('comboAtivo').checked = pack.ativo;
+      document.getElementById('comboModalTitle').innerHTML = '<i class="fas fa-edit"></i> Editar Combo';
+      document.getElementById('comboItensContainer').innerHTML = '';
+      pack.itens.forEach(function(item) {
+        addComboItem(item.produtoId, item.quantidade);
+      });
+      document.getElementById('comboModalOverlay').classList.add('active');
+    }
+
+    function salvarCombo(e) {
+      e.preventDefault();
+      const id = document.getElementById('comboId').value;
+      const nome = document.getElementById('comboNome').value.trim();
+      const icone = document.getElementById('comboIcone').value.trim() || 'fas fa-cubes';
+      const precoPack = parseFloat(document.getElementById('comboPrecoPack').value);
+      const ativo = document.getElementById('comboAtivo').checked;
+
+      // Coletar itens
+      const itens = [];
+      const rows = document.getElementById('comboItensContainer').children;
+      for (let i = 0; i < rows.length; i++) {
+        const sel = rows[i].querySelector('.combo-prod-select');
+        const qty = rows[i].querySelector('.combo-prod-qty');
+        if (sel.value && parseInt(qty.value) > 0) {
+          itens.push({ produtoId: parseInt(sel.value), quantidade: parseInt(qty.value) });
+        }
+      }
+
+      if (itens.length === 0) {
+        showToast('Adicione pelo menos um item ao combo!', 'error');
+        return;
+      }
+
+      if (id) {
+        // Editar
+        const pack = packsPromocionais.find(function(p) { return p.id === parseInt(id); });
+        if (pack) {
+          pack.nome = nome;
+          pack.icone = icone;
+          pack.precoPack = precoPack;
+          pack.ativo = ativo;
+          pack.itens = itens;
+        }
+      } else {
+        // Novo
+        const maxId = packsPromocionais.reduce(function(max, p) { return p.id > max ? p.id : max; }, 0);
+        packsPromocionais.push({
+          id: maxId + 1,
+          nome: nome,
+          itens: itens,
+          precoPack: precoPack,
+          icone: icone,
+          ativo: ativo
+        });
+      }
+
+      salvarPacks();
+      renderCombosTable();
+      closeComboModal();
+      showToast('Combo salvo com sucesso!');
+    }
+
+    function excluirCombo(packId) {
+      if (!confirm('Tem certeza que deseja excluir este combo?')) return;
+      packsPromocionais = packsPromocionais.filter(function(p) { return p.id !== packId; });
+      salvarPacks();
+      renderCombosTable();
+      showToast('Combo excludo!');
     }
   </script>
 </body>
