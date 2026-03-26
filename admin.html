@@ -630,6 +630,118 @@
     .toast-success { background: var(--cor-sucesso); }
     .toast-error { background: var(--cor-perigo); }
 
+    /* PEDIDOS FIREBASE */
+    .pedidos-firebase-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pedido-firebase-card {
+      background: var(--cor-card);
+      border-radius: var(--radius);
+      padding: 18px;
+      border-left: 4px solid #666;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .pedido-firebase-card.status-novo { border-left-color: #e53935; }
+    .pedido-firebase-card.status-preparando { border-left-color: #ff9800; }
+    .pedido-firebase-card.status-pronto { border-left-color: #2196F3; }
+    .pedido-firebase-card.status-entregue { border-left-color: #4CAF50; opacity: 0.7; }
+    .pedido-firebase-card.nao-lido { box-shadow: 0 0 0 2px #e53935, 0 4px 15px rgba(229,57,53,0.3); }
+    .pedido-firebase-card .pedido-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pedido-firebase-card .pedido-cliente {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .pedido-firebase-card .pedido-data {
+      color: #888;
+      font-size: 0.8rem;
+    }
+    .pedido-firebase-card .pedido-badge {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pedido-badge.badge-novo { background: #e53935; color: #fff; }
+    .pedido-badge.badge-preparando { background: #ff9800; color: #fff; }
+    .pedido-badge.badge-pronto { background: #2196F3; color: #fff; }
+    .pedido-badge.badge-entregue { background: #4CAF50; color: #fff; }
+    .pedido-firebase-card .pedido-itens {
+      color: #ccc;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .pedido-firebase-card .pedido-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .pedido-firebase-card .pedido-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cor-secundaria);
+    }
+    .pedido-firebase-card .pedido-acoes {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pedido-firebase-card .pedido-acoes .btn {
+      font-size: 0.75rem;
+      padding: 5px 10px;
+    }
+    .pedido-firebase-card .pedido-detalhe {
+      color: #999;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+    .pedido-firebase-card .pedido-detalhe i {
+      width: 18px;
+      text-align: center;
+      margin-right: 5px;
+      color: var(--cor-secundaria);
+    }
+    .filtro-pedido {
+      border: 1px solid #444;
+      background: transparent;
+      color: #ccc;
+      cursor: pointer;
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .filtro-pedido.active {
+      background: var(--cor-secundaria) !important;
+      color: #000 !important;
+      border-color: var(--cor-secundaria) !important;
+    }
+    .novo-pedido-pulse {
+      animation: pulseNew 1s ease-in-out 3;
+    }
+    @keyframes pulseNew {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.01); box-shadow: 0 0 20px rgba(229,57,53,0.4); }
+    }
+
     /* RESPONSIVO */
     @media (max-width: 768px) {
       .admin-header { padding: 15px; flex-direction: column; gap: 15px; }
@@ -639,6 +751,22 @@
       table { display: block; overflow-x: auto; }
     }
   </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_PROJETO.firebaseapp.com",
+      projectId: "SEU_PROJECT_ID",
+      storageBucket: "SEU_PROJETO.appspot.com",
+      messagingSenderId: "SEU_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
 </head>
 <body>
 
@@ -745,6 +873,27 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- PEDIDOS EM TEMPO REAL (FIREBASE) -->
+      <div class="section-header" style="margin-top: 30px;">
+        <h2><i class="fas fa-bell"></i> Pedidos em Tempo Real</h2>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <span class="badge-info" id="badgePedidosNovos" style="display:none; background:#dc3545; color:#fff; padding:4px 12px; border-radius:20px; font-weight:700;">0 novos</span>
+          <button class="btn btn-outline btn-sm" onclick="marcarTodosLidos()"><i class="fas fa-check-double"></i> Marcar todos lidos</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <button class="btn btn-sm filtro-pedido active" data-filtro="todos" onclick="filtrarPedidos('todos', this)">Todos</button>
+        <button class="btn btn-sm filtro-pedido" data-filtro="novo" onclick="filtrarPedidos('novo', this)" style="background:#e53935;color:#fff;">Novos</button>
+        <button class="btn btn-sm filtro-pedido" data-filtro="preparando" onclick="filtrarPedidos('preparando', this)" style="background:#ff9800;color:#fff;">Preparando</button>
+        <button class="btn btn-sm filtro-pedido" data-filtro="pronto" onclick="filtrarPedidos('pronto', this)" style="background:#2196F3;color:#fff;">Pronto</button>
+        <button class="btn btn-sm filtro-pedido" data-filtro="entregue" onclick="filtrarPedidos('entregue', this)" style="background:#4CAF50;color:#fff;">Entregue</button>
+      </div>
+
+      <div id="pedidosFirebase" class="pedidos-firebase-list">
+        <div class="empty-state"><i class="fas fa-satellite-dish"></i><p>Conectando ao Firebase...</p></div>
       </div>
 
       <!-- LISTA DE PRODUTOS -->
@@ -987,6 +1136,7 @@
       renderTable();
       updateStats();
       populateCategorias();
+      iniciarListenerPedidos();
     }
 
     /* ============================================
@@ -1423,6 +1573,188 @@
       toast.textContent = msg;
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 3000);
+    }
+
+    /* ============================================
+       FIREBASE - PEDIDOS EM TEMPO REAL
+       ============================================ */
+    let pedidosFirebase = [];
+    let filtroPedidoAtual = 'todos';
+    let primeiraCarregada = true;
+
+    // Som de notificação (beep gerado por código)
+    function tocarNotificacao() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+        // Segundo beep
+        setTimeout(() => {
+          const osc2 = ctx.createOscillator();
+          const gain2 = ctx.createGain();
+          osc2.connect(gain2);
+          gain2.connect(ctx.destination);
+          osc2.frequency.value = 1100;
+          osc2.type = 'sine';
+          gain2.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+          osc2.start(ctx.currentTime);
+          osc2.stop(ctx.currentTime + 0.5);
+        }, 200);
+      } catch(e) {}
+    }
+
+    function iniciarListenerPedidos() {
+      try {
+        db.collection('pedidos')
+          .orderBy('criadoEm', 'desc')
+          .limit(50)
+          .onSnapshot(function(snapshot) {
+            pedidosFirebase = [];
+            snapshot.forEach(function(doc) {
+              pedidosFirebase.push({ id: doc.id, ...doc.data() });
+            });
+
+            // Detectar novos pedidos (não na primeira carga)
+            if (!primeiraCarregada) {
+              snapshot.docChanges().forEach(function(change) {
+                if (change.type === 'added') {
+                  const pedido = change.doc.data();
+                  if (pedido.status === 'novo') {
+                    tocarNotificacao();
+                    showToast('🔔 Novo pedido de ' + (pedido.cliente || 'Cliente'), 'success');
+                  }
+                }
+              });
+            }
+            primeiraCarregada = false;
+
+            renderPedidosFirebase();
+            atualizarBadgeNovos();
+          }, function(err) {
+            console.log('Erro no listener:', err);
+            document.getElementById('pedidosFirebase').innerHTML = 
+              '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Erro ao conectar. Verifique a configuração do Firebase.</p></div>';
+          });
+      } catch(e) {
+        console.log('Firebase não configurado:', e);
+        document.getElementById('pedidosFirebase').innerHTML = 
+          '<div class="empty-state"><i class="fas fa-cog"></i><p>Configure o Firebase para ver pedidos em tempo real.</p></div>';
+      }
+    }
+
+    function renderPedidosFirebase() {
+      const container = document.getElementById('pedidosFirebase');
+      let filtrados = pedidosFirebase;
+
+      if (filtroPedidoAtual !== 'todos') {
+        filtrados = pedidosFirebase.filter(p => p.status === filtroPedidoAtual);
+      }
+
+      if (filtrados.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Nenhum pedido ' + 
+          (filtroPedidoAtual !== 'todos' ? 'com status "' + filtroPedidoAtual + '"' : 'recebido ainda') + '</p></div>';
+        return;
+      }
+
+      container.innerHTML = filtrados.map(function(pedido) {
+        const data = pedido.criadoEm ? new Date(pedido.criadoEm.seconds * 1000) : new Date();
+        const dataStr = data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+        const itensHTML = (pedido.itens || []).map(function(i) {
+          return '<div>' + i.qtd + 'x ' + escapeHTML(i.nome) + ' — R$ ' + (i.preco * i.qtd).toFixed(2).replace('.', ',') + '</div>';
+        }).join('');
+        
+        const statusClass = 'status-' + (pedido.status || 'novo');
+        const badgeClass = 'badge-' + (pedido.status || 'novo');
+        const naoLido = !pedido.lido ? 'nao-lido' : '';
+        const pulseClass = !pedido.lido && pedido.status === 'novo' ? 'novo-pedido-pulse' : '';
+
+        const statusLabels = { novo: 'Novo', preparando: 'Preparando', pronto: 'Pronto', entregue: 'Entregue' };
+        const statusAtual = pedido.status || 'novo';
+
+        let acoesHTML = '';
+        if (statusAtual === 'novo') {
+          acoesHTML = '<button class="btn btn-sm" style="background:#ff9800;color:#fff;" onclick="mudarStatusPedido(\'' + pedido.id + '\', \'preparando\')"><i class="fas fa-fire"></i> Preparar</button>';
+        } else if (statusAtual === 'preparando') {
+          acoesHTML = '<button class="btn btn-sm" style="background:#2196F3;color:#fff;" onclick="mudarStatusPedido(\'' + pedido.id + '\', \'pronto\')"><i class="fas fa-check"></i> Pronto</button>';
+        } else if (statusAtual === 'pronto') {
+          acoesHTML = '<button class="btn btn-sm" style="background:#4CAF50;color:#fff;" onclick="mudarStatusPedido(\'' + pedido.id + '\', \'entregue\')"><i class="fas fa-truck"></i> Entregue</button>';
+        }
+
+        return '<div class="pedido-firebase-card ' + statusClass + ' ' + naoLido + ' ' + pulseClass + '">' +
+          '<div class="pedido-header">' +
+            '<div>' +
+              '<div class="pedido-cliente"><i class="fas fa-user"></i> ' + escapeHTML(pedido.cliente || 'Cliente') + '</div>' +
+              '<div class="pedido-data">' + dataStr + '</div>' +
+            '</div>' +
+            '<span class="pedido-badge ' + badgeClass + '">' + (statusLabels[statusAtual] || statusAtual) + '</span>' +
+          '</div>' +
+          '<div class="pedido-detalhe"><i class="fas fa-map-marker-alt"></i> ' + escapeHTML(pedido.endereco || 'Não informado') + '</div>' +
+          '<div class="pedido-detalhe"><i class="fas fa-credit-card"></i> ' + escapeHTML(pedido.pagamento || 'Não informado') + '</div>' +
+          (pedido.observacoes ? '<div class="pedido-detalhe"><i class="fas fa-comment"></i> ' + escapeHTML(pedido.observacoes) + '</div>' : '') +
+          '<div class="pedido-itens">' + itensHTML + '</div>' +
+          '<div class="pedido-footer">' +
+            '<div class="pedido-total">R$ ' + (pedido.total || 0).toFixed(2).replace('.', ',') + '</div>' +
+            '<div class="pedido-acoes">' + acoesHTML + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function mudarStatusPedido(pedidoId, novoStatus) {
+      try {
+        db.collection('pedidos').doc(pedidoId).update({
+          status: novoStatus,
+          lido: true
+        }).then(function() {
+          showToast('Status atualizado para: ' + novoStatus, 'success');
+        });
+      } catch(e) {
+        showToast('Erro ao atualizar status', 'error');
+      }
+    }
+
+    function marcarTodosLidos() {
+      const naoLidos = pedidosFirebase.filter(p => !p.lido);
+      if (naoLidos.length === 0) {
+        showToast('Nenhum pedido não lido', 'success');
+        return;
+      }
+      const batch = db.batch();
+      naoLidos.forEach(function(p) {
+        batch.update(db.collection('pedidos').doc(p.id), { lido: true });
+      });
+      batch.commit().then(function() {
+        showToast(naoLidos.length + ' pedido(s) marcado(s) como lido(s)', 'success');
+      });
+    }
+
+    function atualizarBadgeNovos() {
+      const novos = pedidosFirebase.filter(p => p.status === 'novo' && !p.lido);
+      const badge = document.getElementById('badgePedidosNovos');
+      if (novos.length > 0) {
+        badge.textContent = novos.length + ' novo' + (novos.length > 1 ? 's' : '');
+        badge.style.display = 'inline-block';
+        document.title = '(' + novos.length + ') Admin - Adega Altas Horas';
+      } else {
+        badge.style.display = 'none';
+        document.title = 'Admin - Adega Altas Horas';
+      }
+    }
+
+    function filtrarPedidos(filtro, btn) {
+      filtroPedidoAtual = filtro;
+      document.querySelectorAll('.filtro-pedido').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderPedidosFirebase();
     }
   </script>
 </body>

@@ -14,6 +14,24 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    // ========== FIREBASE CONFIG ==========
+    // Substitua pelos dados do seu projeto Firebase
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_PROJETO.firebaseapp.com",
+      projectId: "SEU_PROJECT_ID",
+      storageBucket: "SEU_PROJETO.appspot.com",
+      messagingSenderId: "SEU_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
   <style>
     /* ============================================
        VARIÁVEIS E RESET
@@ -3333,6 +3351,9 @@
       // Registrar vendas para estatísticas
       registrarVenda(carrinho);
 
+      // Salvar pedido no Firebase
+      salvarPedidoFirebase(nome, retirarLoja, endereco, pagamento, observacoes, carrinho, getCartTotal());
+
       // Limpar carrinho após envio
       carrinho = [];
       saveCart();
@@ -3399,6 +3420,34 @@
 
       localStorage.setItem("adega_vendas", JSON.stringify(vendas));
       localStorage.setItem("adega_historico_pedidos", JSON.stringify(historico));
+    }
+
+    /* ============================================
+       FIREBASE - SALVAR PEDIDO
+       ============================================ */
+    function salvarPedidoFirebase(nome, retirarLoja, endereco, pagamento, observacoes, itens, total) {
+      try {
+        db.collection('pedidos').add({
+          cliente: nome,
+          retirarLoja: retirarLoja,
+          endereco: retirarLoja ? 'Retirar na loja' : endereco,
+          pagamento: pagamento,
+          observacoes: observacoes || '',
+          itens: itens.map(function(i) {
+            return { id: i.id, nome: i.nome, qtd: i.quantidade, preco: i.preco };
+          }),
+          total: total,
+          status: 'novo',
+          criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+          lido: false
+        }).then(function() {
+          console.log('Pedido salvo no Firebase');
+        }).catch(function(err) {
+          console.log('Erro ao salvar pedido:', err);
+        });
+      } catch(e) {
+        console.log('Firebase não configurado:', e);
+      }
     }
 
     /* ============================================
